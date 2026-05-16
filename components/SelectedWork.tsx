@@ -28,7 +28,7 @@ export function SelectedWork() {
       <div className="grid grid-cols-1 gap-y-12 md:grid-cols-12 md:gap-x-6 md:gap-y-40">
         {films.map((project, i) => (
           <div key={project.slug} className={`col-span-1 ${layoutMap[i % layoutMap.length]}`}>
-            <WorkTile project={project} index={i} />
+            <WorkTile project={project} index={i} priority={i === 0} />
           </div>
         ))}
       </div>

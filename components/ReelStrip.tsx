@@ -32,8 +32,9 @@ function ReelCard({ project, index }: { project: (typeof reels)[0]; index: numbe
             src={project.poster}
             alt={project.title}
             fill
+            priority={index === 0}
             className={`object-cover transition-opacity duration-500 ${iframeReady ? "opacity-0" : "opacity-100"}`}
-            sizes="22vw"
+            sizes="(max-width: 768px) 60vw, 22vw"
           />
           {hovered && (
             <iframe

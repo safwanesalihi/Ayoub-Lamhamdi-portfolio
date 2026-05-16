@@ -1,37 +1,65 @@
 "use client";
 
-import { useState } from "react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
-// Swap this ID to change the hero showreel
 const HERO_VIMEO_ID = "1043106925";
+// Static poster shown while the background video loads
+const HERO_POSTER =
+  "https://i.vimeocdn.com/video/1966237447-97ce7784906fd8051b078a9c1b2edced76dc1f7d8e443017a7b4f5fc3c84f667-d_1280?region=us";
 
 export function Hero() {
   const [reelOpen, setReelOpen] = useState(false);
+  const [bgMounted, setBgMounted] = useState(false);
+  const [bgReady, setBgReady] = useState(false);
   const reduce = useReducedMotion();
 
   const bgSrc = `https://player.vimeo.com/video/${HERO_VIMEO_ID}?background=1&autoplay=1&loop=1&muted=1&quality=auto`;
   const fullSrc = `https://player.vimeo.com/video/${HERO_VIMEO_ID}?autoplay=1&title=0&byline=0&portrait=0&color=ffffff`;
 
+  // Defer the heavy Vimeo iframe until after the initial paint
+  useEffect(() => {
+    const id = setTimeout(() => setBgMounted(true), 800);
+    return () => clearTimeout(id);
+  }, []);
+
   return (
     <section className="relative h-[100svh] w-full overflow-hidden bg-ink">
-      {/* Vimeo background player — covers viewport like background-size: cover */}
-      <iframe
-        src={bgSrc}
-        allow="autoplay"
-        aria-hidden="true"
-        title="Showreel background"
-        className="pointer-events-none absolute border-0"
-        style={{
-          top: "50%",
-          left: "50%",
-          width: "100vw",
-          height: "56.25vw",
-          minHeight: "100vh",
-          minWidth: "177.78vh",
-          transform: "translate(-50%, -50%)",
-        }}
+      {/* Static poster — visible immediately, fades when the video is ready */}
+      <Image
+        src={HERO_POSTER}
+        alt=""
+        fill
+        priority
+        aria-hidden
+        sizes="100vw"
+        quality={75}
+        className={`pointer-events-none object-cover transition-opacity duration-[2000ms] ease-cinema ${
+          bgReady ? "opacity-0" : "opacity-100"
+        }`}
       />
+
+      {/* Vimeo background — mounted after first paint, covers poster once buffered */}
+      {bgMounted && (
+        <iframe
+          src={bgSrc}
+          allow="autoplay"
+          aria-hidden={true}
+          title="Showreel background"
+          className="pointer-events-none absolute border-0"
+          style={{
+            top: "50%",
+            left: "50%",
+            width: "100vw",
+            height: "56.25vw",
+            minHeight: "100vh",
+            minWidth: "177.78vh",
+            transform: "translate(-50%, -50%)",
+          }}
+          onLoad={() => setTimeout(() => setBgReady(true), 800)}
+        />
+      )}
 
       {/* Legibility overlay */}
       <div className="absolute inset-0 bg-ink/40" aria-hidden />

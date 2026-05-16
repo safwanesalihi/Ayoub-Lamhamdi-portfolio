@@ -9,9 +9,10 @@ import type { Project } from "@/data/projects";
 type Props = {
   project: Project;
   index: number;
+  priority?: boolean;
 };
 
-export function WorkTile({ project, index }: Props) {
+export function WorkTile({ project, index, priority = false }: Props) {
   const ref = useRef<HTMLAnchorElement | null>(null);
   const [hovered, setHovered] = useState(false);
   const [iframeReady, setIframeReady] = useState(false);
@@ -52,8 +53,13 @@ export function WorkTile({ project, index }: Props) {
             src={project.poster}
             alt={project.title}
             fill
+            priority={priority}
             className={`object-cover transition-opacity duration-500 ${iframeReady ? "opacity-0" : "opacity-100"}`}
-            sizes={isReel ? "33vw" : "100vw"}
+            sizes={
+              isReel
+                ? "(max-width: 768px) 60vw, 22vw"
+                : "(max-width: 768px) 100vw, (max-width: 1280px) 65vw, 50vw"
+            }
           />
 
           {/* Iframe mounts on hover, fades in only after it signals ready */}

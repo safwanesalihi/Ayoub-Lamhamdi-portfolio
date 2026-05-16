@@ -10,11 +10,11 @@ export function AboutHero() {
   const reduce = useReducedMotion();
 
   return (
-    <section id="about" className="relative flex min-h-[100svh] flex-col border-t border-line/60">
+    <section id="about" className="relative flex flex-col border-t border-line/60 md:min-h-[100svh]">
       {/* Main panel — portrait left, text right */}
-      <div className="flex flex-1 flex-col md:flex-row">
-        {/* Left: portrait */}
-        <div className="relative min-h-[70vw] md:min-h-0 md:flex-1 order-last md:order-first">
+      <div className="flex flex-col md:flex-1 md:flex-row">
+        {/* Left: portrait — first on both mobile and desktop */}
+        <div className="relative h-[60vh] md:h-auto md:min-h-0 md:flex-1">
           <Image
             src="/ayoub-lamhamdi.jpg"
             alt="Ayoub Lamhamdi — Filmmaker & Cinematographer"
@@ -27,7 +27,7 @@ export function AboutHero() {
         </div>
 
         {/* Right: text */}
-        <div className="flex flex-col justify-between px-edge py-16 md:w-[58%] md:py-20">
+        <div className="flex flex-col px-edge py-10 md:w-[58%] md:justify-between md:py-20">
           <div>
             <motion.p
               className="label text-bone/55"
@@ -40,17 +40,17 @@ export function AboutHero() {
             </motion.p>
             <RevealText
               as="h2"
-              className="display mt-8 text-5xl md:text-[clamp(3.5rem,5.5vw,7rem)]"
+              className="display mt-6 text-4xl md:mt-8 md:text-[clamp(3.5rem,5.5vw,7rem)]"
               stagger={0.06}
             >
               Built on direction, light, movement.
             </RevealText>
           </div>
 
-          <div className="mt-14 md:mt-0">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-12">
+          <div className="mt-6 md:mt-0">
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-12">
               <motion.p
-                className="text-base text-bone/80 md:text-lg"
+                className="text-sm text-bone/80 md:text-lg"
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -63,7 +63,7 @@ export function AboutHero() {
                 visual effects, transforming simple ideas into memorable images.
               </motion.p>
               <motion.p
-                className="text-base text-bone/65 md:text-lg"
+                className="hidden text-bone/65 md:block md:text-lg"
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -83,7 +83,7 @@ export function AboutHero() {
             >
               <Link
                 href="/about"
-                className="mt-10 inline-flex items-center gap-3 text-sm text-bone/80 transition-colors duration-500 hover:text-bone"
+                className="mt-8 inline-flex items-center gap-3 text-sm text-bone/80 transition-colors duration-500 hover:text-bone"
               >
                 <span className="label">Read full bio</span>
                 <span aria-hidden>→</span>
