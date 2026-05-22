@@ -3,14 +3,15 @@ import { allProjects } from "@/data/projects";
 import { fetchVimeoVideo } from "@/lib/vimeo";
 import { SiteFooter } from "@/components/SiteFooter";
 
-type Props = { params: { slug: string } };
+type Props = { params: Promise<{ slug: string }> };
 
 export function generateStaticParams() {
   return allProjects.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: Props) {
-  const project = allProjects.find((p) => p.slug === params.slug);
+  const { slug } = await params;
+  const project = allProjects.find((p) => p.slug === slug);
   if (!project) return {};
 
   try {
@@ -25,7 +26,8 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export default async function WorkDetailPage({ params }: Props) {
-  const project = allProjects.find((p) => p.slug === params.slug);
+  const { slug } = await params;
+  const project = allProjects.find((p) => p.slug === slug);
   if (!project) notFound();
 
   let thumbnail: string | undefined;
