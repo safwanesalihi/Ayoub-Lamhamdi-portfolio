@@ -5,11 +5,10 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 const HERO_VIMEO_ID = "1043106925";
-// Static poster shown while the background video loads
-const HERO_POSTER =
-  "https://i.vimeocdn.com/video/1966237447-97ce7784906fd8051b078a9c1b2edced76dc1f7d8e443017a7b4f5fc3c84f667-d_1280?region=us";
 
-export function Hero() {
+type Props = { poster?: string };
+
+export function Hero({ poster }: Props) {
   const [reelOpen, setReelOpen] = useState(false);
   const [bgMounted, setBgMounted] = useState(false);
   const [bgReady, setBgReady] = useState(false);
@@ -27,18 +26,20 @@ export function Hero() {
   return (
     <section className="relative h-[100svh] w-full overflow-hidden bg-ink">
       {/* Static poster — visible immediately, fades when the video is ready */}
-      <Image
-        src={HERO_POSTER}
-        alt=""
-        fill
-        priority
-        aria-hidden
-        sizes="100vw"
-        quality={75}
-        className={`pointer-events-none object-cover transition-opacity duration-[2000ms] ease-cinema ${
-          bgReady ? "opacity-0" : "opacity-100"
-        }`}
-      />
+      {poster && (
+        <Image
+          src={poster}
+          alt=""
+          fill
+          priority
+          aria-hidden
+          sizes="100vw"
+          quality={75}
+          className={`pointer-events-none object-cover transition-opacity duration-[2000ms] ease-cinema ${
+            bgReady ? "opacity-0" : "opacity-100"
+          }`}
+        />
+      )}
 
       {/* Vimeo background — mounted after first paint, covers poster once buffered */}
       {bgMounted && (

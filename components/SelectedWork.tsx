@@ -1,4 +1,5 @@
 import { films } from "@/data/projects";
+import { fetchThumbnailMap } from "@/lib/vimeo";
 import { WorkTile } from "./WorkTile";
 import { RevealText } from "./RevealText";
 
@@ -9,7 +10,9 @@ const layoutMap = [
   "md:col-span-8 md:col-start-3",
 ];
 
-export function SelectedWork() {
+export async function SelectedWork() {
+  const thumbnails = await fetchThumbnailMap(films.map((f) => f.vimeoId));
+
   return (
     <section id="work" className="relative px-edge py-section">
       <div className="mb-10 flex items-end justify-between md:mb-24">
@@ -28,7 +31,12 @@ export function SelectedWork() {
       <div className="grid grid-cols-1 gap-y-12 md:grid-cols-12 md:gap-x-6 md:gap-y-40">
         {films.map((project, i) => (
           <div key={project.slug} className={`col-span-1 ${layoutMap[i % layoutMap.length]}`}>
-            <WorkTile project={project} index={i} priority={i === 0} />
+            <WorkTile
+              project={project}
+              index={i}
+              priority={i === 0}
+              thumbnail={thumbnails[project.vimeoId]}
+            />
           </div>
         ))}
       </div>

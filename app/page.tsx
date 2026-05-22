@@ -1,15 +1,24 @@
 import { Hero } from "@/components/Hero";
-import { AboutHero } from "@/components/AboutHero";
 import { ReelStrip } from "@/components/ReelStrip";
 import { SelectedWork } from "@/components/SelectedWork";
 import { ContactCTA } from "@/components/ContactCTA";
 import { SiteFooter } from "@/components/SiteFooter";
+import { fetchVimeoVideo } from "@/lib/vimeo";
 
-export default function Home() {
+const HERO_VIMEO_ID = "1043106925";
+
+export default async function Home() {
+  let heroPoster: string | undefined;
+  try {
+    const video = await fetchVimeoVideo(HERO_VIMEO_ID);
+    heroPoster = video.thumbnail;
+  } catch {
+    // no poster — the dark bg-ink fallback in Hero handles this
+  }
+
   return (
     <main className="relative">
-      <AboutHero />
-      <Hero />
+      <Hero poster={heroPoster} />
       <ReelStrip />
       <SelectedWork />
       <ContactCTA />

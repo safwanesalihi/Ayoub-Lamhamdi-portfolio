@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { allProjects } from "@/data/projects";
+import { fetchVimeoVideo } from "@/lib/vimeo";
 import { SiteFooter } from "@/components/SiteFooter";
 
 type Props = { params: { slug: string } };
@@ -8,18 +9,37 @@ export function generateStaticParams() {
   return allProjects.map((p) => ({ slug: p.slug }));
 }
 
-export function generateMetadata({ params }: Props) {
+export async function generateMetadata({ params }: Props) {
   const project = allProjects.find((p) => p.slug === params.slug);
   if (!project) return {};
-  return { title: `${project.title} — Ayoub Lamhamdi` };
+
+  try {
+    const video = await fetchVimeoVideo(project.vimeoId);
+    return {
+      title: `${project.title} — Ayoub Lamhamdi`,
+      openGraph: { images: [{ url: video.thumbnail }] },
+    };
+  } catch {
+    return { title: `${project.title} — Ayoub Lamhamdi` };
+  }
 }
 
-export default function WorkDetailPage({ params }: Props) {
+export default async function WorkDetailPage({ params }: Props) {
   const project = allProjects.find((p) => p.slug === params.slug);
   if (!project) notFound();
 
+  let thumbnail: string | undefined;
+  let embedSrc = `https://player.vimeo.com/video/${project.vimeoId}?autoplay=0&loop=0&title=0&byline=0&portrait=0&color=ffffff`;
+
+  try {
+    const video = await fetchVimeoVideo(project.vimeoId);
+    thumbnail = video.thumbnail;
+    embedSrc = video.embedUrl;
+  } catch {
+    // embedSrc fallback above is used; no poster shown
+  }
+
   const isReel = project.format === "reel";
-  const embedSrc = `https://player.vimeo.com/video/${project.vimeoId}?autoplay=0&loop=0&title=0&byline=0&portrait=0&color=ffffff`;
 
   return (
     <main className="relative">
@@ -38,6 +58,7 @@ export default function WorkDetailPage({ params }: Props) {
           className={`relative mx-auto w-full overflow-hidden rounded-sm bg-line/40 ${
             isReel ? "max-w-sm" : "max-w-5xl"
           }`}
+          style={thumbnail ? { backgroundImage: `url(${thumbnail})`, backgroundSize: "cover", backgroundPosition: "center" } : undefined}
         >
           <div className={isReel ? "aspect-[9/16]" : "aspect-video"}>
             <iframe

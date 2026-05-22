@@ -10,9 +10,10 @@ type Props = {
   project: Project;
   index: number;
   priority?: boolean;
+  thumbnail?: string;
 };
 
-export function WorkTile({ project, index, priority = false }: Props) {
+export function WorkTile({ project, index, priority = false, thumbnail }: Props) {
   const ref = useRef<HTMLAnchorElement | null>(null);
   const [hovered, setHovered] = useState(false);
   const [iframeReady, setIframeReady] = useState(false);
@@ -49,18 +50,20 @@ export function WorkTile({ project, index, priority = false }: Props) {
           className={`relative w-full ${isReel ? "aspect-[9/16]" : "aspect-[4/3] md:aspect-[16/10]"}`}
         >
           {/* Poster — stays visible until the iframe is ready, then fades behind it */}
-          <Image
-            src={project.poster}
-            alt={project.title}
-            fill
-            priority={priority}
-            className={`object-cover transition-opacity duration-500 ${iframeReady ? "opacity-0" : "opacity-100"}`}
-            sizes={
-              isReel
-                ? "(max-width: 768px) 60vw, 22vw"
-                : "(max-width: 768px) 100vw, (max-width: 1280px) 65vw, 50vw"
-            }
-          />
+          {thumbnail && (
+            <Image
+              src={thumbnail}
+              alt={project.title}
+              fill
+              priority={priority}
+              className={`object-cover transition-opacity duration-500 ${iframeReady ? "opacity-0" : "opacity-100"}`}
+              sizes={
+                isReel
+                  ? "(max-width: 768px) 60vw, 22vw"
+                  : "(max-width: 768px) 100vw, (max-width: 1280px) 65vw, 50vw"
+              }
+            />
+          )}
 
           {/* Iframe mounts on hover, fades in only after it signals ready */}
           {hovered && (
