@@ -21,9 +21,7 @@ type OEmbedResponse = {
 export async function fetchVimeoVideo(videoId: string): Promise<VimeoVideo> {
   const url = `https://vimeo.com/api/oembed.json?url=https://vimeo.com/${videoId}&width=1280`;
 
-  const res = await fetch(url, {
-    next: { revalidate: 3600 },
-  });
+  const res = await fetch(url, { cache: "force-cache" });
 
   if (!res.ok) throw new Error(`Vimeo oEmbed error ${res.status} for video ${videoId}`);
 
