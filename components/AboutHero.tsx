@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { ClientMarquee } from "./ClientMarquee";
@@ -11,23 +10,10 @@ export function AboutHero() {
 
   return (
     <section id="about" className="relative flex flex-col border-t border-line/60 md:min-h-[100svh]">
-      {/* Main panel — portrait left, text right */}
+      {/* Main panel — text full width */}
       <div className="flex flex-col md:flex-1 md:flex-row">
-        {/* Left: portrait — first on both mobile and desktop */}
-        <div className="relative h-[60vh] md:h-auto md:min-h-0 md:flex-1">
-          <Image
-            src="/ayoub-lamhamdi.jpg"
-            alt="Ayoub Lamhamdi — Filmmaker & Cinematographer"
-            fill
-            className="object-cover grayscale"
-            sizes="(max-width: 768px) 100vw, 42vw"
-            priority
-          />
-          <div className="absolute inset-0 bg-ink/10" />
-        </div>
-
-        {/* Right: text */}
-        <div className="flex flex-col px-edge py-10 md:w-[58%] md:justify-between md:py-20">
+        {/* Text */}
+        <div className="flex flex-col px-edge py-10 md:w-full md:justify-between md:py-20">
           <div>
             <motion.p
               className="label text-bone/55"

@@ -17,12 +17,6 @@ export function SiteFooter() {
           >
             lamhamdiayoub36@gmail.com
           </Link>
-          <Link
-            href="tel:+212689616143"
-            className="mt-3 block text-lg underline decoration-bone/30 underline-offset-8 transition-colors hover:decoration-bone"
-          >
-            +212 689-616143
-          </Link>
         </div>
         <div className="col-span-6 md:col-span-3 md:col-start-8">
           <p className="label text-bone/50">Elsewhere</p>
