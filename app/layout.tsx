@@ -20,6 +20,12 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${fontDisplay.variable} ${fontSans.variable}`}>
+      <head>
+        <link rel="preconnect" href="https://player.vimeo.com" />
+        <link rel="preconnect" href="https://i.vimeocdn.com" />
+        <link rel="preconnect" href="https://f.vimeocdn.com" crossOrigin="" />
+        <link rel="dns-prefetch" href="https://fresnel.vimeocdn.com" />
+      </head>
       <body className="bg-ink text-bone selection:bg-bone selection:text-ink">
         <SmoothScroll>
           <SiteNav />

@@ -18,10 +18,10 @@ type OEmbedResponse = {
   height: number;
 };
 
-export async function fetchVimeoVideo(videoId: string): Promise<VimeoVideo> {
-  const url = `https://vimeo.com/api/oembed.json?url=https://vimeo.com/${videoId}&width=1280`;
+export async function fetchVimeoVideo(videoId: string, width = 1280): Promise<VimeoVideo> {
+  const url = `https://vimeo.com/api/oembed.json?url=https://vimeo.com/${videoId}&width=${width}`;
 
-  const res = await fetch(url, { cache: "force-cache" });
+  const res = await fetch(url, { next: { revalidate: 86400 } });
 
   if (!res.ok) throw new Error(`Vimeo oEmbed error ${res.status} for video ${videoId}`);
 
@@ -45,7 +45,7 @@ export async function fetchVimeoVideos(videoIds: string[]): Promise<VimeoVideo[]
 
 /** Returns a map of vimeoId → thumbnail URL. Failed fetches are silently skipped. */
 export async function fetchThumbnailMap(videoIds: string[]): Promise<Record<string, string>> {
-  const results = await Promise.allSettled(videoIds.map(fetchVimeoVideo));
+  const results = await Promise.allSettled(videoIds.map((id) => fetchVimeoVideo(id, 640)));
   const map: Record<string, string> = {};
   results.forEach((result, i) => {
     if (result.status === "fulfilled") map[videoIds[i]] = result.value.thumbnail;

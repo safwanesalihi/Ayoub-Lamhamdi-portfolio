@@ -19,7 +19,7 @@ export function Hero({ poster }: Props) {
 
   // Defer the heavy Vimeo iframe until after the initial paint
   useEffect(() => {
-    const id = setTimeout(() => setBgMounted(true), 800);
+    const id = setTimeout(() => setBgMounted(true), 250);
     return () => clearTimeout(id);
   }, []);
 
@@ -58,7 +58,7 @@ export function Hero({ poster }: Props) {
             minWidth: "177.78vh",
             transform: "translate(-50%, -50%)",
           }}
-          onLoad={() => setTimeout(() => setBgReady(true), 800)}
+          onLoad={() => setTimeout(() => setBgReady(true), 250)}
         />
       )}
 
