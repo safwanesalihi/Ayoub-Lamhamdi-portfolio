@@ -19,14 +19,14 @@ export function AboutTeaser() {
           </RevealText>
           <div className="mt-8 grid grid-cols-1 gap-6 md:mt-12 md:grid-cols-2 md:gap-16">
             <p className="text-base text-bone/80 md:text-lg">
-              Ayoub Lamhamdi is a Moroccan filmmaker and cinematographer crafting
+              Ayoub Lamhamdi is a Moroccan director and cinematographer crafting
               visually driven work with meaning and emotion — from commercial
               campaigns to comedy and narrative pieces. His process is built on
               strong direction, lighting, camera movement, and visual effects,
               transforming simple ideas into memorable images.
             </p>
             <p className="text-base text-bone/65 md:text-lg">
-              For Ayoub, filmmaking is about building emotion, delivering a
+              For Ayoub, directing is about building emotion, delivering a
               message, and telling stories that connect. He has worked on
               advertising campaigns, digital content, and television projects for
               clients including Coca-Cola and Samsung.

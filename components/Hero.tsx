@@ -73,7 +73,7 @@ export function Hero({ poster }: Props) {
           transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: reduce ? 0 : 0.4 }}
           className="text-sm leading-relaxed text-bone/85 md:max-w-md md:text-base"
         >
-          Filmmaker &amp; Cinematographer
+          Director &amp; Cinematographer
           <span className="block text-bone/55">Based in Morocco, working worldwide.</span>
         </motion.p>
 

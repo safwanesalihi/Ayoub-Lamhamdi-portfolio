@@ -5,13 +5,13 @@ import { SiteNav } from "@/components/SiteNav";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Ayoub Lamhamdi — Filmmaker & Cinematographer",
+  title: "Ayoub Lamhamdi — Director & Cinematographer",
   description:
-    "Moroccan filmmaker and cinematographer crafting visually driven work for advertising, digital, and television. Coca-Cola, Samsung, and more.",
+    "Moroccan director and cinematographer crafting visually driven work for advertising, digital, and television. Coca-Cola, Samsung, and more.",
   openGraph: {
-    title: "Ayoub Lamhamdi — Filmmaker & Cinematographer",
+    title: "Ayoub Lamhamdi — Director & Cinematographer",
     description:
-      "Moroccan filmmaker and cinematographer crafting visually driven work for advertising, digital, and television.",
+      "Moroccan director and cinematographer crafting visually driven work for advertising, digital, and television.",
     type: "website",
   },
   metadataBase: new URL("https://ayoublamhamdi.com"),
