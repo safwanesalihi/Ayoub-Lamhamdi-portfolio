@@ -1,3 +1,5 @@
+import raw from "./projects.json";
+
 export type ProjectRole = "Director" | "DP" | "Director & DP";
 export type ProjectFormat = "film" | "reel";
 
@@ -9,123 +11,12 @@ export type Project = {
   role: ProjectRole;
   format: ProjectFormat;
   vimeoId: string;
-  /** Layout hint for the asymmetric work grid (films only). */
   layout: "full" | "wide" | "half" | "offset";
   blurb?: string;
   credits?: Record<string, string>;
 };
 
-export const films: Project[] = [
-  {
-    slug: "katewka3-bahat-ep04",
-    client: "2M TV",
-    title: "Katewka3 Bahat — EP04",
-    year: 2024,
-    role: "Director & DP",
-    format: "film",
-    vimeoId: "1043106925",
-    layout: "full",
-    blurb: "Episode 4 of the comedy series Katewka3 Bahat — shot for 2M TV.",
-  },
-  {
-    slug: "micro-brottoire-ep06",
-    client: "2M TV",
-    title: "Micro Brottoire — EP06",
-    year: 2024,
-    role: "Director & DP",
-    format: "film",
-    vimeoId: "1039665387",
-    layout: "half",
-    blurb: "Street interview segment — Episode 6 for 2M TV.",
-  },
-  {
-    slug: "katewka3-bahat-ep06",
-    client: "2M TV",
-    title: "Katewka3 Bahat — EP06",
-    year: 2024,
-    role: "Director & DP",
-    format: "film",
-    vimeoId: "1039382427",
-    layout: "offset",
-    blurb: "Episode 6 of the hit comedy series — shot for 2M TV.",
-  },
-  {
-    slug: "olla",
-    client: "Independent",
-    title: "Olla",
-    year: 2023,
-    role: "Director & DP",
-    format: "film",
-    vimeoId: "917310792",
-    layout: "wide",
-    blurb: "An independent short film.",
-  },
-  {
-    slug: "hayati-nouman-belayyachi",
-    client: "Nouman Belayyachi",
-    title: "Hayati",
-    year: 2023,
-    role: "Director & DP",
-    format: "film",
-    vimeoId: "897142646",
-    layout: "half",
-    blurb: "Music video for Nouman Belayyachi.",
-  },
-];
-
-export const reels: Project[] = [
-  {
-    slug: "dounia-boutazot-mzia",
-    client: "Mzia",
-    title: "Dounia Boutazot x Mzia",
-    year: 2025,
-    role: "Director & DP",
-    format: "reel",
-    vimeoId: "1188713351",
-    layout: "half",
-  },
-  {
-    slug: "sketchosi9a-soho-snacks",
-    client: "Soho Snacks",
-    title: "Sketchosi9a x Soho Snacks",
-    year: 2025,
-    role: "Director & DP",
-    format: "reel",
-    vimeoId: "1188628037",
-    layout: "half",
-  },
-  {
-    slug: "raja-club-athletic",
-    client: "Raja Club Athletic",
-    title: "Raja Club Athletic",
-    year: 2025,
-    role: "Director & DP",
-    format: "reel",
-    vimeoId: "1188627962",
-    layout: "half",
-  },
-  {
-    slug: "tobigo-ayoub-idri",
-    client: "Tobigo",
-    title: "Tobigo x Ayoub Idri",
-    year: 2023,
-    role: "Director & DP",
-    format: "reel",
-    vimeoId: "837356237",
-    layout: "half",
-  },
-];
-
-/** All projects combined — used for the detail page lookup. */
+export const films = raw.films as Project[];
+export const reels = raw.reels as Project[];
 export const allProjects: Project[] = [...films, ...reels];
-
-export const clients = [
-  "2m tv",
-  "kfc maroc",
-  "samsung maroc",
-  "mcdonald's maroc",
-  "jobup",
-  "raja club athletic",
-  "soho snacks",
-  "mzia",
-];
+export const clients: string[] = raw.clients;
