@@ -4,18 +4,16 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
-const HERO_VIMEO_ID = "1043106925";
+type Props = { vimeoId: string; poster?: string };
 
-type Props = { poster?: string };
-
-export function Hero({ poster }: Props) {
+export function Hero({ vimeoId, poster }: Props) {
   const [reelOpen, setReelOpen] = useState(false);
   const [bgMounted, setBgMounted] = useState(false);
   const [bgReady, setBgReady] = useState(false);
   const reduce = useReducedMotion();
 
-  const bgSrc = `https://player.vimeo.com/video/${HERO_VIMEO_ID}?background=1&autoplay=1&loop=1&muted=1&quality=auto`;
-  const fullSrc = `https://player.vimeo.com/video/${HERO_VIMEO_ID}?autoplay=1&title=0&byline=0&portrait=0&color=ffffff`;
+  const bgSrc = `https://player.vimeo.com/video/${vimeoId}?background=1&autoplay=1&loop=1&muted=1&quality=auto`;
+  const fullSrc = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&title=0&byline=0&portrait=0&color=ffffff`;
 
   // Defer the heavy Vimeo iframe until after the initial paint
   useEffect(() => {

@@ -16,6 +16,7 @@ export type Project = {
   credits?: Record<string, string>;
 };
 
+export const heroVimeoId: string = raw.heroVimeoId;
 export const films = raw.films as Project[];
 export const reels = raw.reels as Project[];
 export const allProjects: Project[] = [...films, ...reels];

@@ -6,6 +6,7 @@ export default function AdminPage() {
     <AdminClient
       films={projectsData.films}
       reels={projectsData.reels}
+      heroVimeoId={projectsData.heroVimeoId}
     />
   );
 }

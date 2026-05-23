@@ -109,6 +109,22 @@ export async function addProject(_: unknown, formData: FormData): Promise<Result
   }
 }
 
+export async function updateHero(_: unknown, formData: FormData): Promise<Result> {
+  try {
+    authorize(formData);
+    const vimeoId = (formData.get("heroVimeoId") as string).trim();
+    if (!vimeoId) throw new Error("Vimeo ID is required");
+
+    const { content, sha } = await getFile();
+    content.heroVimeoId = vimeoId;
+    await putFile(content, sha, `Update hero video: ${vimeoId}`);
+
+    return { success: true };
+  } catch (e) {
+    return { success: false, error: (e as Error).message };
+  }
+}
+
 export async function deleteProject(_: unknown, formData: FormData): Promise<Result> {
   try {
     authorize(formData);

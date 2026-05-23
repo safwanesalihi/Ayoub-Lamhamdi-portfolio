@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { verifyLogin, addProject, deleteProject } from "./actions";
+import { verifyLogin, addProject, deleteProject, updateHero } from "./actions";
 
 type Project = {
   slug: string;
@@ -18,15 +18,18 @@ type Feedback = { type: "success" | "error"; message: string };
 export function AdminClient({
   films: initialFilms,
   reels: initialReels,
+  heroVimeoId: initialHeroId,
 }: {
   films: Project[];
   reels: Project[];
+  heroVimeoId: string;
 }) {
   const [isAuthed, setIsAuthed] = useState(false);
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const [films, setFilms] = useState(initialFilms);
   const [reels, setReels] = useState(initialReels);
+  const [heroId, setHeroId] = useState(initialHeroId);
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -95,6 +98,22 @@ export function AdminClient({
     }
   }
 
+  async function handleUpdateHero(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setLoading(true);
+    setFeedback(null);
+    const fd = new FormData(e.currentTarget);
+    fd.set("password", password);
+    const result = await updateHero({}, fd);
+    setLoading(false);
+    if (result.success) {
+      setHeroId(fd.get("heroVimeoId") as string);
+      setFeedback({ type: "success", message: "Hero video updated — Vercel is redeploying, live in ~1 min." });
+    } else {
+      setFeedback({ type: "error", message: result.error ?? "Failed to update hero" });
+    }
+  }
+
   /* ── Login screen ───────────────────────────────────────────── */
   if (!isAuthed) {
     return (
@@ -153,6 +172,25 @@ export function AdminClient({
             {feedback.message}
           </div>
         )}
+
+        {/* Hero Video */}
+        <section className="mb-16">
+          <p className="label mb-2 text-bone/50">Hero Video</p>
+          <p className="mb-4 text-xs text-bone/30">Current: vimeo.com/{heroId}</p>
+          <form onSubmit={handleUpdateHero} className="flex gap-3">
+            <input
+              name="heroVimeoId"
+              required
+              placeholder="New Vimeo ID"
+              defaultValue={heroId}
+              className="flex-1 border border-line bg-transparent px-3 py-2 text-sm text-bone placeholder-bone/20 outline-none focus:border-bone/40"
+            />
+            <button type="submit" disabled={loading}
+              className="border border-bone/40 px-6 py-2 text-sm text-bone transition-colors hover:bg-bone hover:text-ink disabled:opacity-40">
+              {loading ? "Saving…" : "Update →"}
+            </button>
+          </form>
+        </section>
 
         {/* Add Project */}
         <section className="mb-16">
