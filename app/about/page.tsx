@@ -41,7 +41,7 @@ export default function AboutPage() {
               className="display text-[clamp(3rem,8vw,8rem)] leading-[0.9]"
               stagger={0.04}
             >
-              Filmmaker.
+              Director.
             </RevealText>
             <RevealText
               as="p"
