@@ -313,6 +313,8 @@ export const DEFAULT_PROFILE: Profile = {
   trainingDays: 5,
   city: "Casablanca",
   country: "Morocco",
+  lat: 33.5731,
+  lng: -7.5898,
   quranGoalPages: 4,
   waterGoal: 10,
 };

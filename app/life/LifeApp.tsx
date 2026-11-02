@@ -23,6 +23,13 @@ const TABS: { key: TabKey; label: string; icon: string }[] = [
   { key: "settings", label: "Settings", icon: "⚙" },
 ];
 
+const SYNC = {
+  local: { label: "Msejjel f had l-jihaz", color: "#8A8580" },
+  connecting: { label: "Kayt-synchroniza…", color: "#C9A66B" },
+  synced: { label: "Msejjel f l-compte · sync m3a ajhiza khrin", color: "#7FB77E" },
+  offline: { label: "Bla internet · ghadi ysejjel mlli yrje3", color: "#E5A55B" },
+} as const;
+
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 function greeting(h: number) {
@@ -33,13 +40,13 @@ function greeting(h: number) {
 }
 
 export function LifeApp() {
-  const { state, update, updateDay } = useLife();
+  const { state, update, updateDay, status } = useLife();
   const now = useNow();
   const today = dateKey(now);
   const [day, setDayKey] = useState<string | null>(null);
   const [tab, setTab] = useState<TabKey>("lyoum");
   const activeDay = day ?? today;
-  const times = usePrayerTimes(state?.profile.city ?? "Casablanca", state?.profile.country ?? "Morocco", activeDay);
+  const times = usePrayerTimes(state?.profile.lat ?? 33.5731, state?.profile.lng ?? -7.5898, activeDay);
 
   const setDay = useCallback((fn: (d: DayLog) => DayLog) => updateDay(activeDay, fn), [updateDay, activeDay]);
 
@@ -84,6 +91,9 @@ export function LifeApp() {
               ›
             </button>
             <span className="ml-2 rounded-full bg-white/[0.06] px-3 py-1.5 text-sm tabular-nums">{score}%</span>
+          </div>
+          <div className="w-full text-[11px] text-bone/40 md:w-auto md:text-right">
+            <span className="inline-block h-1.5 w-1.5 rounded-full align-middle" style={{ background: SYNC[status].color }} /> <span className="align-middle">{SYNC[status].label}</span>
           </div>
         </header>
 

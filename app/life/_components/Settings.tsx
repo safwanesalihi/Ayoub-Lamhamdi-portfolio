@@ -1,7 +1,9 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { DEFAULT_SCHEDULE, defaultState, targets } from "@/lib/life/plan";
+import { CITIES } from "@/lib/life/praytimes";
+import { saveFile } from "@/lib/life/store";
 import type { LifeState, Profile } from "@/lib/life/types";
 import { Card, ghostBtnCls, inputCls } from "./ui";
 import type { ViewProps } from "./types";
@@ -30,13 +32,12 @@ export function Settings({ state, update }: ViewProps) {
   const set = <K extends keyof Profile>(k: K, v: Profile[K]) => update((s) => ({ ...s, profile: { ...s.profile, [k]: v } }));
   const num = (k: keyof Profile) => (e: React.ChangeEvent<HTMLInputElement>) => set(k, Number(e.target.value) as never);
 
-  const exportData = () => {
-    const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = `life-backup-${new Date().toISOString().slice(0, 10)}.json`;
-    a.click();
-    URL.revokeObjectURL(a.href);
+  const [ask, setAsk] = useState<null | "schedule" | "all">(null);
+  const [msg, setMsg] = useState("");
+
+  const exportData = async () => {
+    const ok = await saveFile(`life-backup-${new Date().toISOString().slice(0, 10)}.json`, JSON.stringify(state, null, 2));
+    setMsg(ok ? "Backup tsejjel ✓" : "Ma t9adch ytsejjel l-backup.");
   };
 
   return (
@@ -88,10 +89,21 @@ export function Settings({ state, update }: ViewProps) {
             <input type="number" className={inputCls} value={p.waterGoal} onChange={num("waterGoal")} />
           </Field>
           <Field label="Mdina (awqat salat)">
-            <input className={inputCls} value={p.city} onChange={(e) => set("city", e.target.value)} />
-          </Field>
-          <Field label="Blad">
-            <input className={inputCls} value={p.country} onChange={(e) => set("country", e.target.value)} />
+            <select
+              className={inputCls}
+              value={p.city}
+              onChange={(e) => {
+                const c = CITIES.find((x) => x.name === e.target.value);
+                if (c) update((s) => ({ ...s, profile: { ...s.profile, city: c.name, lat: c.lat, lng: c.lng } }));
+              }}
+            >
+              {!CITIES.some((c) => c.name === p.city) && <option value={p.city} className="bg-ink">{p.city}</option>}
+              {CITIES.map((c) => (
+                <option key={c.name} value={c.name} className="bg-ink">
+                  {c.name}
+                </option>
+              ))}
+            </select>
           </Field>
           <Field label="Wird Qur2an (sf7at / nhar)">
             <input type="number" className={inputCls} value={p.quranGoalPages} onChange={num("quranGoalPages")} />
@@ -104,7 +116,7 @@ export function Settings({ state, update }: ViewProps) {
 
       <Card title="Data">
         <p className="text-sm leading-relaxed text-bone/60">
-          Ga3 data kat-tsejel ghir f had l browser (localStorage) — 7ta wa7ed ma kayshoufha. Dir backup mra f simana, w import-ih f telephone/PC akhor.
+          Data dyalk private: 7ta wa7ed ma kayshoufha. F claude.ai katsejjel f l-compte dyalk w kat-synchroniza bin telephone w PC. Backup JSON mzyan mra f chhar.
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
           <button type="button" className={ghostBtnCls} onClick={exportData}>
@@ -115,6 +127,7 @@ export function Settings({ state, update }: ViewProps) {
           </button>
           <input
             ref={fileRef}
+            id="life-import"
             type="file"
             accept="application/json"
             className="hidden"
@@ -124,25 +137,44 @@ export function Settings({ state, update }: ViewProps) {
               try {
                 const data = JSON.parse(await f.text()) as LifeState;
                 if (!data.profile || !data.days) throw new Error();
-                update(() => ({ ...defaultState(), ...data }));
-                alert("Import tdar ✓");
+                const def = defaultState();
+                update(() => ({ ...def, ...data, profile: { ...def.profile, ...data.profile } }));
+                setMsg("Import tdar ✓");
               } catch {
-                alert("Fichier machi s7i7");
+                setMsg("Had l-fichier machi backup s7i7.");
               }
               e.target.value = "";
             }}
           />
-          <button type="button" className={ghostBtnCls} onClick={() => confirm("Rje3 l planning l asli?") && update((s) => ({ ...s, schedule: DEFAULT_SCHEDULE }))}>
+          <button type="button" className={ghostBtnCls} onClick={() => setAsk("schedule")}>
             Reset planning
           </button>
-          <button
-            type="button"
-            className="rounded-full border border-[#E07A5F]/50 px-4 py-2 text-sm text-[#E07A5F]"
-            onClick={() => confirm("Msa7 ga3 data? Had l 7aja ma katrj3ch.") && update(() => defaultState())}
-          >
+          <button type="button" className="rounded-full border border-[#E07A5F]/50 px-4 py-2 text-sm text-[#E07A5F]" onClick={() => setAsk("all")}>
             Msa7 kolchi
           </button>
         </div>
+        {ask && (
+          <div className="mt-4 rounded-xl border border-[#E07A5F]/40 p-3 text-sm">
+            <p className="text-bone/80">{ask === "all" ? "Msa7 ga3 data (ayam, makla, gym…)? Had l-7aja ma katrj3ch." : "Rje3 l-planning dyal nhar l asli?"}</p>
+            <div className="mt-3 flex gap-2">
+              <button
+                type="button"
+                className="rounded-full bg-[#E07A5F] px-4 py-1.5 text-sm text-ink"
+                onClick={() => {
+                  update((s) => (ask === "all" ? defaultState() : { ...s, schedule: DEFAULT_SCHEDULE }));
+                  setMsg(ask === "all" ? "Tmse7 kolchi." : "Planning rje3 l asli.");
+                  setAsk(null);
+                }}
+              >
+                Ah, akked
+              </button>
+              <button type="button" className={ghostBtnCls} onClick={() => setAsk(null)}>
+                La
+              </button>
+            </div>
+          </div>
+        )}
+        {msg && <p className="mt-3 text-xs text-bone/60" role="status">{msg}</p>}
       </Card>
     </div>
   );

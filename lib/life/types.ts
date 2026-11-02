@@ -17,6 +17,8 @@ export type Profile = {
   trainingDays: 3 | 4 | 5 | 6;
   city: string;
   country: string;
+  lat: number;
+  lng: number;
   quranGoalPages: number;
   waterGoal: number;
 };
