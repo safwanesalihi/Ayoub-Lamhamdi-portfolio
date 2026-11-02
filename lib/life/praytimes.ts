@@ -37,11 +37,12 @@ export type CalcOptions = { fajr: number; isha: number; tune?: Partial<Record<ke
 
 export const MOROCCO: CalcOptions = { fajr: 19, isha: 17, tune: { dhuhr: 5, maghrib: 5 } };
 
-export function calcPrayerTimes(date: Date, lat: number, lng: number, opts: CalcOptions = MOROCCO): PrayerTimes {
+/** `tzHours` overrides the device time zone (used on the server, which runs in UTC). */
+export function calcPrayerTimes(date: Date, lat: number, lng: number, opts: CalcOptions = MOROCCO, tzHours?: number): PrayerTimes {
   const y = date.getFullYear();
   const m = date.getMonth() + 1;
   const d = date.getDate();
-  const tz = -new Date(y, m - 1, d, 12).getTimezoneOffset() / 60;
+  const tz = tzHours ?? -new Date(y, m - 1, d, 12).getTimezoneOffset() / 60;
   const jd = julian(y, m, d) - lng / (15 * 24);
 
   const at = (t: number) => sun(jd + t / 24);

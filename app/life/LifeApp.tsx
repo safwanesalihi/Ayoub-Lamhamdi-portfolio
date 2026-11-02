@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { type ReactNode, useCallback, useState } from "react";
 import { dateKey, emptyDay, fromKey, scoreDay, shiftDate } from "@/lib/life/plan";
 import { useLife, useNow, usePrayerTimes } from "@/lib/life/store";
 import type { DayLog } from "@/lib/life/types";
@@ -38,7 +38,7 @@ function greeting(h: number) {
   return "Good evening";
 }
 
-export function LifeApp() {
+export function LifeApp({ extraSettings }: { extraSettings?: ReactNode } = {}) {
   const { state, update, updateDay, status } = useLife();
   const now = useNow();
   const today = dateKey(now);
@@ -56,7 +56,7 @@ export function LifeApp() {
   const log = state.days[activeDay] ?? emptyDay();
   const isToday = activeDay === today;
   const d = fromKey(activeDay);
-  const props: ViewProps = { state, day: activeDay, log, isToday, now, times, update, updateDay, setDay, go: setTab };
+  const props: ViewProps = { state, day: activeDay, log, isToday, now, times, update, updateDay, setDay, go: setTab, extraSettings };
   const score = scoreDay(state, activeDay).total;
 
   const title = TABS.find((t) => t.key === tab)!.label;

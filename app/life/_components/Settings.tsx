@@ -25,7 +25,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   );
 }
 
-export function Settings({ state, update }: ViewProps) {
+export function Settings({ state, update, extraSettings }: ViewProps) {
   const p = state.profile;
   const t = targets(p);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -42,6 +42,7 @@ export function Settings({ state, update }: ViewProps) {
 
   return (
     <div className="grid gap-4 md:grid-cols-2">
+      {extraSettings}
       <Card title="Profile">
         <div className="grid grid-cols-2 gap-3">
           <Field label="Name">

@@ -7,11 +7,22 @@ import type { DayLog, LifeState } from "./types";
 
 const KEY = "ayoub-life-v1";
 
+/** Set by the standalone site before rendering: API base path and signed-in user id. */
+type Host = { api: string; userId: string; onSignedOut?: () => void };
+const host = (): Host | undefined => (typeof window !== "undefined" ? (window as any).__LIFE_HOST__ : undefined);
+const storageKey = () => (host() ? `life-user-${host()!.userId}` : KEY);
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type Runtime = { use(name: string): Promise<any> };
 const runtime = (): Runtime | undefined => (typeof window !== "undefined" ? (window as any).claude : undefined);
 
 /** "local": this device only · "connecting" · "synced": saved to the account · "offline": account unreachable right now */
+type Writer = {
+  setMeta: (body: Record<string, unknown>) => Promise<unknown>;
+  setDay: (key: string, body: Record<string, unknown>) => Promise<unknown>;
+  deleteDay: (key: string) => Promise<unknown>;
+};
+
 export type SyncStatus = "local" | "connecting" | "synced" | "offline";
 
 function normalize(parsed: Partial<LifeState>): LifeState {
@@ -22,7 +33,7 @@ function normalize(parsed: Partial<LifeState>): LifeState {
 
 function loadLocal(): LifeState {
   try {
-    const raw = localStorage.getItem(KEY);
+    const raw = localStorage.getItem(storageKey());
     return raw ? normalize(JSON.parse(raw)) : defaultState();
   } catch {
     return defaultState();
@@ -39,7 +50,7 @@ export function useLife() {
 
   // Last values known to match the account store, by reference.
   const synced = useRef<{ profile: unknown; schedule: unknown; days: Record<string, DayLog> }>({ profile: null, schedule: null, days: {} });
-  const refs = useRef<{ meta: any; days: any } | null>(null);
+  const refs = useRef<Writer | null>(null);
   const pending = useRef(new Set<string>());
 
   useEffect(() => {
@@ -50,7 +61,7 @@ export function useLife() {
   useEffect(() => {
     if (!state) return;
     try {
-      localStorage.setItem(KEY, JSON.stringify(state));
+      localStorage.setItem(storageKey(), JSON.stringify(state));
     } catch {
       /* storage blocked — keep working in memory */
     }
@@ -73,7 +84,11 @@ export function useLife() {
 
       const meta = db.doc(`data/users/${id}/life`);
       const days = meta.collection("days");
-      refs.current = { meta, days };
+      refs.current = {
+        setMeta: (b) => meta.set(b),
+        setDay: (k, b) => days.doc(k).set(b),
+        deleteDay: (k) => days.doc(k).delete(),
+      };
       let metaLive = false;
       let daysLive = false;
       const maybeReady = () => {
@@ -159,6 +174,95 @@ export function useLife() {
     };
   }, []);
 
+  // Server sync (only on the standalone site).
+  useEffect(() => {
+    const h = host();
+    if (!h) return;
+    let alive = true;
+    const call = async (method: string, path: string, body?: unknown) => {
+      let res: Response;
+      try {
+        res = await fetch(h.api + path, {
+          method,
+          credentials: "same-origin",
+          headers: body ? { "content-type": "application/json" } : undefined,
+          body: body ? JSON.stringify(body) : undefined,
+        });
+      } catch {
+        throw { code: "network" };
+      }
+      if (res.status === 401) {
+        h.onSignedOut?.();
+        throw { code: "unauthenticated" };
+      }
+      if (!res.ok) throw { code: "unavailable" };
+      return res.status === 204 ? null : res.json();
+    };
+    refs.current = {
+      setMeta: (b) => call("PUT", "/meta", b),
+      setDay: (k, b) => call("PUT", `/days/${k}`, b),
+      deleteDay: (k) => call("DELETE", `/days/${k}`),
+    };
+
+    const pull = async () => {
+      setStatus((st) => (st === "synced" ? st : "connecting"));
+      try {
+        const data = (await call("GET", "/state")) as { meta: Pick<LifeState, "profile" | "schedule"> | null; days: Record<string, DayLog> };
+        if (!alive) return;
+        setState((s) => {
+          if (!s) return s;
+          let next = s;
+          if (data.meta && !pending.current.has("__meta")) {
+            const profile = { ...s.profile, ...data.meta.profile };
+            const schedule = data.meta.schedule ? migrateSchedule(data.meta.schedule) : s.schedule;
+            if (same(profile, s.profile) && same(schedule, s.schedule)) {
+              synced.current.profile = s.profile;
+              synced.current.schedule = s.schedule;
+            } else {
+              next = { ...next, profile, schedule };
+              synced.current.profile = profile;
+              synced.current.schedule = schedule;
+            }
+          }
+          let days = next.days;
+          for (const [k, raw] of Object.entries(data.days)) {
+            if (pending.current.has(k)) continue;
+            const remote = { ...emptyDay(), ...raw } as DayLog;
+            if (days[k] && same(remote, days[k])) {
+              synced.current.days[k] = days[k];
+              continue;
+            }
+            days = { ...days, [k]: remote };
+            synced.current.days[k] = remote;
+          }
+          // deleted on another device
+          for (const k of Object.keys(synced.current.days)) {
+            if (!(k in data.days) && !pending.current.has(k) && k in days) {
+              days = { ...days };
+              delete days[k];
+              delete synced.current.days[k];
+            }
+          }
+          return days === next.days ? next : { ...next, days };
+        });
+        setStatus("synced");
+        setReady(true);
+      } catch (e: any) {
+        if (alive && e?.code !== "unauthenticated") setStatus("offline");
+      }
+    };
+
+    pull();
+    const onVisible = () => document.visibilityState === "visible" && pull();
+    document.addEventListener("visibilitychange", onVisible);
+    window.addEventListener("online", pull);
+    return () => {
+      alive = false;
+      document.removeEventListener("visibilitychange", onVisible);
+      window.removeEventListener("online", pull);
+    };
+  }, []);
+
   // Push local changes (debounced, one write at a time).
   const flushTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const flushing = useRef(false);
@@ -176,13 +280,13 @@ export function useLife() {
           if (k === "__meta") {
             synced.current.profile = s.profile;
             synced.current.schedule = s.schedule;
-            await refs.current.meta.set(clean({ profile: s.profile, schedule: s.schedule, version: 1 }));
+            await refs.current.setMeta(clean({ profile: s.profile, schedule: s.schedule, version: 1 }));
           } else if (s.days[k]) {
             synced.current.days[k] = s.days[k];
-            await refs.current.days.doc(k).set(clean(s.days[k]));
+            await refs.current.setDay(k, clean(s.days[k]));
           } else {
             delete synced.current.days[k];
-            await refs.current.days.doc(k).delete();
+            await refs.current.deleteDay(k);
           }
           // a newer edit to the same doc may have arrived while writing
           const now = latest.current!;
@@ -190,7 +294,7 @@ export function useLife() {
           if (!changed) pending.current.delete(k);
         } catch (e: any) {
           pending.current.delete(k);
-          if (e?.code === "unavailable" || e?.code === "resource_exhausted") setStatus("offline");
+          if (e?.code === "unavailable" || e?.code === "resource_exhausted" || e?.code === "network") setStatus("offline");
         }
       }
     } finally {
