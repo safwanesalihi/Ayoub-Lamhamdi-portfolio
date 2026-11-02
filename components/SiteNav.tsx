@@ -11,6 +11,8 @@ const items = [
 
 export function SiteNav() {
   const pathname = usePathname();
+  // The personal tracker at /life has its own navigation.
+  if (pathname.startsWith("/life")) return null;
   return (
     <header className="pointer-events-none fixed inset-x-0 top-0 z-50">
       <nav className="pointer-events-auto flex items-center justify-between px-edge pt-6 mix-blend-difference">
