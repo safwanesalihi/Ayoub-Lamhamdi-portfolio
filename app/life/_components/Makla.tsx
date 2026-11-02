@@ -24,27 +24,27 @@ export function Makla({ state, log, setDay }: ViewProps) {
       <div className="grid content-start gap-4">
         <Card title="Today's targets — lean bulk">
           <div className="space-y-3">
-            <Bar label="Calories" value={tot.kcal} max={t.kcal} color="#E5C07B" />
-            <Bar label="Protein" value={tot.protein} max={t.protein} unit="g" color="#7FB77E" />
-            <Bar label="Carbs" value={tot.carbs} max={t.carbs} unit="g" color="#6FA8DC" />
-            <Bar label="Fat" value={tot.fat} max={t.fat} unit="g" color="#E59A7A" />
+            <Bar label="Calories" value={tot.kcal} max={t.kcal} color="#FFD60A" />
+            <Bar label="Protein" value={tot.protein} max={t.protein} unit="g" color="#30D158" />
+            <Bar label="Carbs" value={tot.carbs} max={t.carbs} unit="g" color="#0A84FF" />
+            <Bar label="Fat" value={tot.fat} max={t.fat} unit="g" color="#FF375F" />
           </div>
-          <p className="mt-4 text-xs leading-relaxed text-bone/50">
+          <p className="mt-4 text-xs leading-relaxed text-fg/50">
             Your maintenance ≈ {t.maintenance} kcal. To build muscle without much fat: +{state.profile.surplus} kcal and {t.protein}g protein (2g/kg). Aim for +0.25 to 0.5 kg per week.
           </p>
         </Card>
 
         <Card title="Eaten today">
           {log.meals.length === 0 ? (
-            <p className="text-sm text-bone/50">Nothing logged yet.</p>
+            <p className="text-sm text-fg/50">Nothing logged yet.</p>
           ) : (
             <ul className="divide-y divide-white/5">
               {log.meals.map((m) => (
                 <li key={m.id} className="flex items-center justify-between gap-2 py-2 text-sm">
                   <span className="truncate">{m.name}</span>
-                  <span className="flex shrink-0 items-center gap-3 tabular-nums text-bone/60">
+                  <span className="flex shrink-0 items-center gap-3 tabular-nums text-fg/60">
                     {Math.round(m.kcal)} kcal · {Math.round(m.protein)}g P
-                    <button type="button" aria-label="Remove" onClick={() => remove(m.id)} className="text-bone/40 hover:text-[#E07A5F]">
+                    <button type="button" aria-label="Remove" onClick={() => remove(m.id)} className="text-fg/40 hover:text-[#FF453A]">
                       ✕
                     </button>
                   </span>
@@ -59,7 +59,7 @@ export function Makla({ state, log, setDay }: ViewProps) {
             <input className={inputCls} placeholder="Search: chicken, eggs, oats…" value={q} onChange={(e) => setQ(e.target.value)} />
             <select className={`${inputCls} w-24`} value={qty} onChange={(e) => setQty(Number(e.target.value))} aria-label="Servings">
               {[0.5, 1, 1.5, 2, 3, 4].map((n) => (
-                <option key={n} value={n} className="bg-ink">
+                <option key={n} value={n} className="bg-card">
                   ×{n}
                 </option>
               ))}
@@ -73,10 +73,10 @@ export function Makla({ state, log, setDay }: ViewProps) {
                 onClick={() =>
                   add({ name: `${f.name} ×${qty} (${f.unit})`, kcal: f.kcal * qty, protein: f.protein * qty, carbs: f.carbs * qty, fat: f.fat * qty })
                 }
-                className="rounded-full border border-white/10 px-3 py-1.5 text-xs hover:border-white/40"
+                className="rounded-full border border-fill/10 px-3 py-1.5 text-xs hover:border-fill/40"
                 title={`${f.unit}: ${f.kcal} kcal, ${f.protein}g protein`}
               >
-                {f.name} <span className="text-bone/40">· {f.unit}</span>
+                {f.name} <span className="text-fg/40">· {f.unit}</span>
               </button>
             ))}
           </div>
@@ -98,19 +98,19 @@ export function Makla({ state, log, setDay }: ViewProps) {
       </div>
 
       <Card title={`Meal plan — ${t.kcal} kcal`}>
-        <p className="mb-4 text-xs text-bone/50">Scaled to your weight and calorie target. Tap &quot;Ate this&quot; to log a meal.</p>
+        <p className="mb-4 text-xs text-fg/50">Scaled to your weight and calorie target. Tap &quot;Ate this&quot; to log a meal.</p>
         <div className="space-y-3">
           {plan.map((m) => (
-            <div key={m.name} className="rounded-xl border border-white/10 p-3">
+            <div key={m.name} className="rounded-[12px] bg-fill/[0.05] p-3">
               <div className="flex items-baseline justify-between gap-2">
                 <div>
-                  <span className="text-xs tabular-nums text-bone/40">{m.time}</span> <span className="text-base">{m.name}</span>
+                  <span className="text-xs tabular-nums text-fg/40">{m.time}</span> <span className="text-base">{m.name}</span>
                 </div>
-                <span className="text-xs tabular-nums text-bone/50">
+                <span className="text-xs tabular-nums text-fg/50">
                   {m.kcal} kcal · {m.protein}g P
                 </span>
               </div>
-              <ul className="mt-2 space-y-0.5 text-[13px] text-bone/70">
+              <ul className="mt-2 space-y-0.5 text-[13px] text-fg/70">
                 {m.items.map((it) => (
                   <li key={it.id}>
                     · {it.name} — {it.qty} × {it.unit.replace(/^1 /, "")}
@@ -119,7 +119,7 @@ export function Makla({ state, log, setDay }: ViewProps) {
               </ul>
               <button
                 type="button"
-                className="mt-2.5 rounded-full border border-white/15 px-3 py-1 text-xs hover:border-white/40"
+                className="mt-2.5 rounded-full border border-fill/15 px-3 py-1 text-xs hover:border-fill/40"
                 onClick={() =>
                   add({
                     name: m.name,
@@ -135,8 +135,8 @@ export function Makla({ state, log, setDay }: ViewProps) {
             </div>
           ))}
         </div>
-        <div className="mt-4 rounded-xl bg-white/[0.04] p-3 text-[12px] leading-relaxed text-bone/60">
-          <b className="font-normal text-bone">Tips:</b> 30-40g protein every meal · carbs before and after training · vegetables daily · creatine 5g/day (optional, well proven) ·
+        <div className="mt-4 rounded-xl bg-fill/[0.04] p-3 text-[12px] leading-relaxed text-fg/60">
+          <b className="font-normal text-fg">Tips:</b> 30-40g protein every meal · carbs before and after training · vegetables daily · creatine 5g/day (optional, well proven) ·
           if eating enough is hard, drink calories (smoothie: milk + banana + oats + peanut butter).
         </div>
       </Card>

@@ -6,10 +6,10 @@ import { Card, Check, Stepper } from "./ui";
 import type { ViewProps } from "./types";
 
 const STATUS_COLOR: Record<PrayerStatus, string> = {
-  jamaa: "#7FB77E",
-  ontime: "#A8D5A2",
-  late: "#E5A55B",
-  missed: "#E07A5F",
+  jamaa: "#248A3D",
+  ontime: "#34C759",
+  late: "#FF9F0A",
+  missed: "#FF453A",
 };
 
 export function Salat({ state, day, log, times, setDay }: ViewProps) {
@@ -18,17 +18,17 @@ export function Salat({ state, day, log, times, setDay }: ViewProps) {
 
   return (
     <div className="grid gap-4 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
-      <Card title="Today's prayers" right={<span className="text-xs text-bone/50">{state.profile.city}</span>}>
-        <ul className="space-y-3">
+      <Card title="Today's prayers" right={<span className="text-xs text-fg/50">{state.profile.city}</span>}>
+        <ul className="-my-1 divide-y divide-fill/10">
           {PRAYERS.map((p) => {
             const st = log.prayers[p.key];
             return (
-              <li key={p.key} className="rounded-xl border border-white/10 p-3">
+              <li key={p.key} className="py-3">
                 <div className="mb-2.5 flex items-baseline justify-between">
-                  <span className="text-base">{p.label}</span>
-                  <span className="tabular-nums text-sm text-bone/50">{times[p.key] ?? "--:--"}</span>
+                  <span className="text-[17px] font-semibold">{p.label}</span>
+                  <span className="tabular-nums text-[17px] text-fg/50">{times[p.key] ?? "--:--"}</span>
                 </div>
-                <div className="grid grid-cols-4 gap-1.5">
+                <div className="grid grid-cols-4 gap-0.5 rounded-[9px] bg-fill/[0.08] p-0.5">
                   {PRAYER_STATUS.map((s) => {
                     const on = st === s.key;
                     return (
@@ -36,11 +36,10 @@ export function Salat({ state, day, log, times, setDay }: ViewProps) {
                         key={s.key}
                         type="button"
                         onClick={() => setDay((d) => ({ ...d, prayers: { ...d.prayers, [p.key]: on ? undefined : s.key } }))}
-                        className="rounded-lg border px-1 py-1.5 text-[11px] transition-colors"
+                        className="rounded-[7px] px-1 py-1.5 text-[12px] font-medium transition-colors"
                         style={{
-                          borderColor: on ? STATUS_COLOR[s.key] : "rgba(255,255,255,0.1)",
-                          background: on ? STATUS_COLOR[s.key] : "transparent",
-                          color: on ? "#0A0A0A" : "rgba(237,231,220,0.7)",
+                                                    background: on ? STATUS_COLOR[s.key] : "transparent",
+                          color: on ? "#FFFFFF" : "rgb(var(--ios-label) / 0.75)",
                         }}
                       >
                         {s.label}
@@ -52,14 +51,14 @@ export function Salat({ state, day, log, times, setDay }: ViewProps) {
             );
           })}
         </ul>
-        {times.sunrise && <p className="mt-3 text-xs text-bone/40">Sunrise: {times.sunrise} — pray Fajr before this time.</p>}
+        {times.sunrise && <p className="mt-3 text-xs text-fg/40">Sunrise: {times.sunrise} — pray Fajr before this time.</p>}
       </Card>
 
       <div className="grid content-start gap-4">
         <Card title="Streak">
           <div className="flex items-end gap-3">
-            <span className="display text-6xl tabular-nums text-accent">{streak}</span>
-            <span className="pb-2 text-sm text-bone/60">days in a row without missing a prayer</span>
+            <span className="display text-6xl tabular-nums text-tint">{streak}</span>
+            <span className="pb-2 text-sm text-fg/60">days in a row without missing a prayer</span>
           </div>
         </Card>
 
@@ -73,11 +72,11 @@ export function Salat({ state, day, log, times, setDay }: ViewProps) {
             </Check>
           </div>
           <div className="mt-4 flex items-center justify-between">
-            <span className="text-sm text-bone/70">Quran (pages) · goal {state.profile.quranGoalPages}</span>
+            <span className="text-sm text-fg/70">Quran (pages) · goal {state.profile.quranGoalPages}</span>
             <Stepper value={log.quranPages} onChange={(v) => setDay((d) => ({ ...d, quranPages: v }))} />
           </div>
           <div className="mt-3 flex items-center justify-between">
-            <span className="text-sm text-bone/70">Sunnah / rawatib (rak'ahs)</span>
+            <span className="text-sm text-fg/70">Sunnah / rawatib (rak'ahs)</span>
             <Stepper value={log.sunnah} step={2} onChange={(v) => setDay((d) => ({ ...d, sunnah: v }))} />
           </div>
         </Card>
@@ -89,7 +88,7 @@ export function Salat({ state, day, log, times, setDay }: ViewProps) {
                 <tr>
                   <th />
                   {last14.map((k) => (
-                    <th key={k} className="font-normal text-bone/40">
+                    <th key={k} className="font-normal text-fg/40">
                       {WEEKDAYS[fromKey(k).getDay()].slice(0, 2)}
                     </th>
                   ))}
@@ -98,12 +97,12 @@ export function Salat({ state, day, log, times, setDay }: ViewProps) {
               <tbody>
                 {PRAYERS.map((p) => (
                   <tr key={p.key}>
-                    <td className="pr-1 text-bone/50">{p.label.split(" ")[0]}</td>
+                    <td className="pr-1 text-fg/50">{p.label.split(" ")[0]}</td>
                     {last14.map((k) => {
                       const st = state.days[k]?.prayers[p.key];
                       return (
                         <td key={k}>
-                          <div className="mx-auto h-4 w-4 rounded" style={{ background: st ? STATUS_COLOR[st] : "rgba(255,255,255,0.06)" }} title={`${k} · ${st ?? "—"}`} />
+                          <div className="mx-auto h-4 w-4 rounded" style={{ background: st ? STATUS_COLOR[st] : "rgb(var(--ios-fill) / 0.06)" }} title={`${k} · ${st ?? "—"}`} />
                         </td>
                       );
                     })}

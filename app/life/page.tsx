@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { LifeApp } from "./LifeApp";
+import "./life.css";
 
 export const metadata: Metadata = {
   title: "Life — Daily tracker",

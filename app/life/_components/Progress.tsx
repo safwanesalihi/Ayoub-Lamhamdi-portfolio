@@ -5,9 +5,9 @@ import { Card } from "./ui";
 import type { ViewProps } from "./types";
 
 function color(v: number) {
-  if (v >= 80) return "#7FB77E";
-  if (v >= 55) return "#C9A66B";
-  return "#E07A5F";
+  if (v >= 80) return "#30D158";
+  if (v >= 55) return "#FF9F0A";
+  return "#FF453A";
 }
 
 export function Progress({ state, day }: ViewProps) {
@@ -52,7 +52,7 @@ export function Progress({ state, day }: ViewProps) {
           { l: "Workouts (7 days)", v: `${gymDone}/${state.profile.trainingDays}` },
         ].map((x) => (
           <Card key={x.l}>
-            <div className="text-[11px] text-bone/50">{x.l}</div>
+            <div className="text-[11px] text-fg/50">{x.l}</div>
             <div className="display mt-1 text-3xl tabular-nums">{x.v}</div>
           </Card>
         ))}
@@ -62,9 +62,9 @@ export function Progress({ state, day }: ViewProps) {
         <div className="flex h-44 items-end gap-1.5">
           {scores.map(({ k, s, has }) => (
             <div key={k} className="flex h-full flex-1 flex-col items-center justify-end gap-1">
-              <span className="text-[9px] tabular-nums text-bone/50">{has ? s : ""}</span>
-              <div className="w-full rounded-t-md" style={{ height: `${Math.max(2, s)}%`, background: has ? color(s) : "rgba(255,255,255,0.06)" }} title={`${k}: ${s}%`} />
-              <span className={`text-[9px] ${k === day ? "text-accent" : "text-bone/40"}`}>{WEEKDAYS[fromKey(k).getDay()].slice(0, 2)}</span>
+              <span className="text-[9px] tabular-nums text-fg/50">{has ? s : ""}</span>
+              <div className="w-full rounded-t-md" style={{ height: `${Math.max(2, s)}%`, background: has ? color(s) : "rgb(var(--ios-fill) / 0.06)" }} title={`${k}: ${s}%`} />
+              <span className={`text-[9px] ${k === day ? "text-tint" : "text-fg/40"}`}>{WEEKDAYS[fromKey(k).getDay()].slice(0, 2)}</span>
             </div>
           ))}
         </div>
@@ -74,7 +74,7 @@ export function Progress({ state, day }: ViewProps) {
         title="Weight — 30 days"
         right={
           tr.perWeek != null ? (
-            <span className="text-xs tabular-nums text-bone/60">
+            <span className="text-xs tabular-nums text-fg/60">
               {tr.perWeek >= 0 ? "+" : ""}
               {tr.perWeek.toFixed(2)} kg/week
             </span>
@@ -84,9 +84,9 @@ export function Progress({ state, day }: ViewProps) {
         {weights.length > 1 ? (
           <div>
             <svg viewBox={`-4 -8 ${W + 8} ${H + 16}`} className="h-40 w-full" preserveAspectRatio="none">
-              <path d={path} fill="none" stroke="#C9A66B" strokeWidth={2} vectorEffect="non-scaling-stroke" />
+              <path d={path} fill="none" stroke="#FF9F0A" strokeWidth={2} vectorEffect="non-scaling-stroke" />
             </svg>
-            <div className="mt-1 flex justify-between text-[11px] tabular-nums text-bone/50">
+            <div className="mt-1 flex justify-between text-[11px] tabular-nums text-fg/50">
               <span>
                 {weights[0].w}kg · {weights[0].k.slice(5)}
               </span>
@@ -97,7 +97,7 @@ export function Progress({ state, day }: ViewProps) {
             </div>
           </div>
         ) : (
-          <p className="text-sm text-bone/50">Log your weight each morning on &quot;Today&quot; to see your progress here.</p>
+          <p className="text-sm text-fg/50">Log your weight each morning on &quot;Today&quot; to see your progress here.</p>
         )}
       </Card>
     </div>

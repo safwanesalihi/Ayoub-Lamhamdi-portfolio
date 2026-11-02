@@ -22,6 +22,12 @@ const config: Config = {
       line: "#1C1C1C",
       accent: "#C9A66B",
       white: "#FFFFFF",
+      // iOS-style tokens for the /life tracker (defined in app/life/life.css)
+      bg: "rgb(var(--ios-bg) / <alpha-value>)",
+      card: "rgb(var(--ios-card) / <alpha-value>)",
+      fg: "rgb(var(--ios-label) / <alpha-value>)",
+      fill: "rgb(var(--ios-fill) / <alpha-value>)",
+      tint: "rgb(var(--ios-tint) / <alpha-value>)",
     },
     fontFamily: {
       display: ["var(--font-display)", "Cormorant Garamond", "ui-serif", "Georgia", "serif"],

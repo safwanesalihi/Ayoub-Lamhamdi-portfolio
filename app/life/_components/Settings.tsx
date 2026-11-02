@@ -19,7 +19,7 @@ const ACTIVITY = [
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="mb-1 block text-xs text-bone/60">{label}</span>
+      <span className="mb-1 block text-xs text-fg/60">{label}</span>
       {children}
     </label>
   );
@@ -49,8 +49,8 @@ export function Settings({ state, update }: ViewProps) {
           </Field>
           <Field label="Sex">
             <select className={inputCls} value={p.sex} onChange={(e) => set("sex", e.target.value as Profile["sex"])}>
-              <option value="m" className="bg-ink">Male</option>
-              <option value="f" className="bg-ink">Female</option>
+              <option value="m" className="bg-card">Male</option>
+              <option value="f" className="bg-card">Female</option>
             </select>
           </Field>
           <Field label="Age">
@@ -68,7 +68,7 @@ export function Settings({ state, update }: ViewProps) {
           <Field label="Activity level">
             <select className={inputCls} value={p.activity} onChange={(e) => set("activity", Number(e.target.value))}>
               {ACTIVITY.map((a) => (
-                <option key={a.v} value={a.v} className="bg-ink">
+                <option key={a.v} value={a.v} className="bg-card">
                   {a.l}
                 </option>
               ))}
@@ -79,10 +79,10 @@ export function Settings({ state, update }: ViewProps) {
           </Field>
           <Field label="Training days per week">
             <select className={inputCls} value={p.trainingDays} onChange={(e) => set("trainingDays", Number(e.target.value) as Profile["trainingDays"])}>
-              <option value={3} className="bg-ink">3 — Full body</option>
-              <option value={4} className="bg-ink">4 — Upper / Lower</option>
-              <option value={5} className="bg-ink">5 — PPL + Upper/Lower</option>
-              <option value={6} className="bg-ink">6 — PPL ×2</option>
+              <option value={3} className="bg-card">3 — Full body</option>
+              <option value={4} className="bg-card">4 — Upper / Lower</option>
+              <option value={5} className="bg-card">5 — PPL + Upper/Lower</option>
+              <option value={6} className="bg-card">6 — PPL ×2</option>
             </select>
           </Field>
           <Field label="Water (glasses / day)">
@@ -97,9 +97,9 @@ export function Settings({ state, update }: ViewProps) {
                 if (c) update((s) => ({ ...s, profile: { ...s.profile, city: c.name, lat: c.lat, lng: c.lng } }));
               }}
             >
-              {!CITIES.some((c) => c.name === p.city) && <option value={p.city} className="bg-ink">{p.city}</option>}
+              {!CITIES.some((c) => c.name === p.city) && <option value={p.city} className="bg-card">{p.city}</option>}
               {CITIES.map((c) => (
-                <option key={c.name} value={c.name} className="bg-ink">
+                <option key={c.name} value={c.name} className="bg-card">
                   {c.name}
                 </option>
               ))}
@@ -109,13 +109,13 @@ export function Settings({ state, update }: ViewProps) {
             <input type="number" className={inputCls} value={p.quranGoalPages} onChange={num("quranGoalPages")} />
           </Field>
         </div>
-        <div className="mt-4 rounded-xl bg-white/[0.04] p-3 text-xs leading-relaxed text-bone/70">
-          BMR {t.bmr} · Maintenance {t.maintenance} kcal → <b className="font-normal text-bone">Target {t.kcal} kcal</b> · Protein {t.protein}g · Fat {t.fat}g · Carbs {t.carbs}g
+        <div className="mt-4 rounded-xl bg-fill/[0.04] p-3 text-xs leading-relaxed text-fg/70">
+          BMR {t.bmr} · Maintenance {t.maintenance} kcal → <b className="font-normal text-fg">Target {t.kcal} kcal</b> · Protein {t.protein}g · Fat {t.fat}g · Carbs {t.carbs}g
         </div>
       </Card>
 
       <Card title="Data">
-        <p className="text-sm leading-relaxed text-bone/60">
+        <p className="text-sm leading-relaxed text-fg/60">
           Your data is private: nobody else can see it. On claude.ai it's saved to your account and syncs between your phone and computer. A JSON backup once a month is still a good idea.
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
@@ -149,17 +149,17 @@ export function Settings({ state, update }: ViewProps) {
           <button type="button" className={ghostBtnCls} onClick={() => setAsk("schedule")}>
             Reset planning
           </button>
-          <button type="button" className="rounded-full border border-[#E07A5F]/50 px-4 py-2 text-sm text-[#E07A5F]" onClick={() => setAsk("all")}>
+          <button type="button" className="rounded-full border border-[#FF453A]/50 px-4 py-2 text-sm text-[#FF453A]" onClick={() => setAsk("all")}>
             Delete everything
           </button>
         </div>
         {ask && (
-          <div className="mt-4 rounded-xl border border-[#E07A5F]/40 p-3 text-sm">
-            <p className="text-bone/80">{ask === "all" ? "Delete all data (days, meals, workouts…)? This can't be undone." : "Restore the default day plan?"}</p>
+          <div className="mt-4 rounded-xl border border-[#FF453A]/40 p-3 text-sm">
+            <p className="text-fg/80">{ask === "all" ? "Delete all data (days, meals, workouts…)? This can't be undone." : "Restore the default day plan?"}</p>
             <div className="mt-3 flex gap-2">
               <button
                 type="button"
-                className="rounded-full bg-[#E07A5F] px-4 py-1.5 text-sm text-ink"
+                className="rounded-full bg-[#FF453A] px-4 py-1.5 text-sm text-white"
                 onClick={() => {
                   update((s) => (ask === "all" ? defaultState() : { ...s, schedule: DEFAULT_SCHEDULE }));
                   setMsg(ask === "all" ? "Everything deleted." : "Day plan restored.");
@@ -174,7 +174,7 @@ export function Settings({ state, update }: ViewProps) {
             </div>
           </div>
         )}
-        {msg && <p className="mt-3 text-xs text-bone/60" role="status">{msg}</p>}
+        {msg && <p className="mt-3 text-xs text-fg/60" role="status">{msg}</p>}
       </Card>
     </div>
   );

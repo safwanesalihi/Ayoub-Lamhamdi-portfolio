@@ -48,12 +48,12 @@ export function uid(): string {
 /* ------------------------------------------------------------------ */
 
 export const AREAS: Record<AreaKey, { label: string; color: string }> = {
-  deen: { label: "Faith", color: "#C9A66B" },
-  sa7a: { label: "Health & gym", color: "#7FB77E" },
-  khedma: { label: "Work", color: "#6FA8DC" },
-  ta3allom: { label: "Learning", color: "#B48EDB" },
-  "3a2ila": { label: "Family & people", color: "#E59A7A" },
-  ra7a: { label: "Rest & sleep", color: "#8A8580" },
+  deen: { label: "Faith", color: "#30B0C7" },
+  sa7a: { label: "Health & gym", color: "#30D158" },
+  khedma: { label: "Work", color: "#0A84FF" },
+  ta3allom: { label: "Learning", color: "#BF5AF2" },
+  "3a2ila": { label: "Family & people", color: "#FF375F" },
+  ra7a: { label: "Rest & sleep", color: "#5E5CE6" },
 };
 
 /* ------------------------------------------------------------------ */
@@ -420,11 +420,11 @@ export function scoreDay(state: LifeState, key: string): { total: number; parts:
 
   const parts: ScorePart[] = [
     { key: "salat", label: "Salat", got: (prayerPts / 5) * 30, max: 30, color: AREAS.deen.color },
-    { key: "deen", label: "Quran & adhkar", got: extraDeen * 8, max: 8, color: "#E3C99A" },
+    { key: "deen", label: "Quran & adhkar", got: extraDeen * 8, max: 8, color: "#64D2FF" },
     { key: "nhar", label: "Planning & tasks", got: work * 25, max: 25, color: AREAS.khedma.color },
     { key: "gym", label: "Gym", got: gym * 15, max: 15, color: AREAS.sa7a.color },
-    { key: "makla", label: "Nutrition", got: food * 12, max: 12, color: "#E5C07B" },
-    { key: "ma", label: "Water", got: water * 5, max: 5, color: "#5BC0EB" },
+    { key: "makla", label: "Nutrition", got: food * 12, max: 12, color: "#FFD60A" },
+    { key: "ma", label: "Water", got: water * 5, max: 5, color: "#64D2FF" },
     { key: "n3as", label: "Sleep", got: sleep * 5, max: 5, color: AREAS.ta3allom.color },
   ];
   const total = Math.round(parts.reduce((a, x) => a + x.got, 0));

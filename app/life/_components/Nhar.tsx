@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { AREAS, areaSplit, blockMinutes, toMinutes, uid } from "@/lib/life/plan";
 import type { AreaKey, Block } from "@/lib/life/types";
-import { btnCls, Card, Check, ghostBtnCls, inputCls } from "./ui";
+import { btnCls, Card, Check, ghostBtnCls, inputCls, Tick } from "./ui";
 import type { ViewProps } from "./types";
 
 const AREA_KEYS = Object.keys(AREAS) as AreaKey[];
@@ -34,12 +34,12 @@ export function Nhar({ state, log, isToday, now, setDay, update }: ViewProps) {
       <Card
         title="Day plan"
         right={
-          <button type="button" className="text-xs text-accent" onClick={() => setEdit((e) => !e)}>
+          <button type="button" className="text-xs text-tint" onClick={() => setEdit((e) => !e)}>
             {edit ? "Done ✓" : "Edit plan"}
           </button>
         }
       >
-        <ul className="space-y-1.5">
+        <ul className="-my-1 divide-y divide-fill/10">
           {schedule.map((b) => {
             const s = toMinutes(b.start);
             const e = toMinutes(b.end);
@@ -47,20 +47,20 @@ export function Nhar({ state, log, isToday, now, setDay, update }: ViewProps) {
             const color = AREAS[b.area].color;
             if (edit)
               return (
-                <li key={b.id} className="grid grid-cols-[4.5rem_4.5rem_1fr] gap-1.5 rounded-xl border border-white/10 p-2 sm:grid-cols-[4.5rem_4.5rem_1fr_7rem_auto]">
+                <li key={b.id} className="grid grid-cols-[4.5rem_4.5rem_1fr] gap-1.5 rounded-xl border border-fill/10 p-2 sm:grid-cols-[4.5rem_4.5rem_1fr_7rem_auto]">
                   <input type="time" className={inputCls} value={b.start} onChange={(ev) => setBlock(b.id, { start: ev.target.value })} />
                   <input type="time" className={inputCls} value={b.end} onChange={(ev) => setBlock(b.id, { end: ev.target.value })} />
                   <input className={inputCls} value={b.title} onChange={(ev) => setBlock(b.id, { title: ev.target.value })} />
                   <select className={inputCls} value={b.area} onChange={(ev) => setBlock(b.id, { area: ev.target.value as AreaKey })}>
                     {AREA_KEYS.map((k) => (
-                      <option key={k} value={k} className="bg-ink">
+                      <option key={k} value={k} className="bg-card">
                         {AREAS[k].label}
                       </option>
                     ))}
                   </select>
                   <button
                     type="button"
-                    className="text-xs text-[#E07A5F]"
+                    className="text-xs text-[#FF453A]"
                     onClick={() => update((st) => ({ ...st, schedule: st.schedule.filter((x) => x.id !== b.id) }))}
                   >
                     Remove
@@ -72,22 +72,17 @@ export function Nhar({ state, log, isToday, now, setDay, update }: ViewProps) {
                 <button
                   type="button"
                   onClick={() => setDay((d) => ({ ...d, blocksDone: { ...d.blocksDone, [b.id]: !d.blocksDone[b.id] } }))}
-                  className={`flex w-full items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition-colors ${live ? "border-accent bg-accent/5" : "border-white/10 hover:bg-white/[0.03]"}`}
+                  className={`flex w-full items-center gap-3 py-3 text-left ${live ? "-mx-2 rounded-[10px] bg-tint/10 px-2" : ""}`}
                 >
-                  <span className="w-[5.5rem] shrink-0 text-[11px] tabular-nums text-bone/50">
+                  <span className="w-[5.5rem] shrink-0 text-[11px] tabular-nums text-fg/50">
                     {b.start}–{b.end}
                   </span>
                   <span className="h-6 w-1 shrink-0 rounded-full" style={{ background: color }} />
-                  <span className={`flex-1 text-sm ${log.blocksDone[b.id] ? "text-bone/40 line-through" : ""}`}>
+                  <span className={`flex-1 text-[15px] ${log.blocksDone[b.id] ? "text-fg/40 line-through" : ""}`}>
                     {b.title}
-                    {live && <span className="ml-2 text-[10px] text-accent">● NOW</span>}
+                    {live && <span className="ml-2 text-[11px] font-semibold text-tint">NOW</span>}
                   </span>
-                  <span
-                    className="grid h-5 w-5 shrink-0 place-items-center rounded-md border text-[11px] text-ink"
-                    style={{ borderColor: log.blocksDone[b.id] ? color : "rgba(255,255,255,0.25)", background: log.blocksDone[b.id] ? color : "transparent" }}
-                  >
-                    {log.blocksDone[b.id] ? "✓" : ""}
-                  </span>
+                  <Tick checked={!!log.blocksDone[b.id]} color={color} />
                 </button>
               </li>
             );
@@ -119,11 +114,11 @@ export function Nhar({ state, log, isToday, now, setDay, update }: ViewProps) {
                     <span className="h-2 w-2 rounded-full" style={{ background: AREAS[k].color }} />
                     {AREAS[k].label}
                   </span>
-                  <span className="tabular-nums text-bone/60">
+                  <span className="tabular-nums text-fg/60">
                     {fmtH(doneMinByArea[k])} / {fmtH(split[k])}
                   </span>
                 </div>
-                <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.07]">
+                <div className="h-1.5 overflow-hidden rounded-full bg-fill/[0.07]">
                   <div className="h-full rounded-full" style={{ width: `${split[k] ? (doneMinByArea[k] / split[k]) * 100 : 0}%`, background: AREAS[k].color }} />
                 </div>
               </li>
@@ -144,7 +139,7 @@ export function Nhar({ state, log, isToday, now, setDay, update }: ViewProps) {
             <input className={inputCls} placeholder="What needs doing…" value={taskText} onChange={(e) => setTaskText(e.target.value)} />
             <select className={`${inputCls} w-28`} value={taskArea} onChange={(e) => setTaskArea(e.target.value as AreaKey)} aria-label="Area">
               {AREA_KEYS.map((k) => (
-                <option key={k} value={k} className="bg-ink">
+                <option key={k} value={k} className="bg-card">
                   {AREAS[k].label}
                 </option>
               ))}
@@ -160,15 +155,15 @@ export function Nhar({ state, log, isToday, now, setDay, update }: ViewProps) {
                     color={AREAS[t.area].color}
                     onChange={(v) => setDay((d) => ({ ...d, tasks: d.tasks.map((x) => (x.id === t.id ? { ...x, done: v } : x)) }))}
                   >
-                    {t.text} <span className="text-[10px] text-bone/40">· {AREAS[t.area].label}</span>
+                    {t.text} <span className="text-[10px] text-fg/40">· {AREAS[t.area].label}</span>
                   </Check>
                 </div>
-                <button type="button" aria-label="Remove" className="px-1 text-bone/30 hover:text-[#E07A5F]" onClick={() => setDay((d) => ({ ...d, tasks: d.tasks.filter((x) => x.id !== t.id) }))}>
+                <button type="button" aria-label="Remove" className="px-1 text-fg/30 hover:text-[#FF453A]" onClick={() => setDay((d) => ({ ...d, tasks: d.tasks.filter((x) => x.id !== t.id) }))}>
                   ✕
                 </button>
               </div>
             ))}
-            {log.tasks.length === 0 && <p className="text-xs text-bone/40">Write your 3 most important tasks — if they get done, the day is a win.</p>}
+            {log.tasks.length === 0 && <p className="text-xs text-fg/40">Write your 3 most important tasks — if they get done, the day is a win.</p>}
           </div>
         </Card>
 
