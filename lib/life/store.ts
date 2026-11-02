@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { dateKey, defaultState, emptyDay, fromKey, type PrayerTimes } from "./plan";
+import { dateKey, defaultState, emptyDay, fromKey, migrateSchedule, type PrayerTimes } from "./plan";
 import { calcPrayerTimes } from "./praytimes";
 import type { DayLog, LifeState } from "./types";
 
@@ -16,7 +16,8 @@ export type SyncStatus = "local" | "connecting" | "synced" | "offline";
 
 function normalize(parsed: Partial<LifeState>): LifeState {
   const def = defaultState();
-  return { ...def, ...parsed, profile: { ...def.profile, ...(parsed.profile ?? {}) }, days: parsed.days ?? {} } as LifeState;
+  const schedule = migrateSchedule(parsed.schedule ?? def.schedule);
+  return { ...def, ...parsed, schedule, profile: { ...def.profile, ...(parsed.profile ?? {}) }, days: parsed.days ?? {} } as LifeState;
 }
 
 function loadLocal(): LifeState {
@@ -91,7 +92,7 @@ export function useLife() {
               setState((s) => {
                 if (!s) return s;
                 const profile = { ...s.profile, ...body.profile };
-                const schedule = body.schedule ?? s.schedule;
+                const schedule = body.schedule ? migrateSchedule(body.schedule) : s.schedule;
                 if (pending.current.has("__meta")) return s;
                 if (same(profile, s.profile) && same(schedule, s.schedule)) {
                   synced.current.profile = s.profile;

@@ -46,10 +46,10 @@ export function Progress({ state, day }: ViewProps) {
     <div className="grid gap-4">
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         {[
-          { l: "Moyenne productivity", v: `${avg}%` },
-          { l: "Streak salat", v: `${prayerStreak(state, day)} ayam` },
-          { l: "Salawat (7 ayam)", v: `${prayersDone}/35` },
-          { l: "Gym (7 ayam)", v: `${gymDone}/${state.profile.trainingDays}` },
+          { l: "Average productivity", v: `${avg}%` },
+          { l: "Prayer streak", v: `${prayerStreak(state, day)} days` },
+          { l: "Prayers (7 days)", v: `${prayersDone}/35` },
+          { l: "Workouts (7 days)", v: `${gymDone}/${state.profile.trainingDays}` },
         ].map((x) => (
           <Card key={x.l}>
             <div className="text-[11px] text-bone/50">{x.l}</div>
@@ -58,7 +58,7 @@ export function Progress({ state, day }: ViewProps) {
         ))}
       </div>
 
-      <Card title="Productivity — 14 yom">
+      <Card title="Productivity — 14 days">
         <div className="flex h-44 items-end gap-1.5">
           {scores.map(({ k, s, has }) => (
             <div key={k} className="flex h-full flex-1 flex-col items-center justify-end gap-1">
@@ -71,12 +71,12 @@ export function Progress({ state, day }: ViewProps) {
       </Card>
 
       <Card
-        title="Wazn — 30 yom"
+        title="Weight — 30 days"
         right={
           tr.perWeek != null ? (
             <span className="text-xs tabular-nums text-bone/60">
               {tr.perWeek >= 0 ? "+" : ""}
-              {tr.perWeek.toFixed(2)} kg/simana
+              {tr.perWeek.toFixed(2)} kg/week
             </span>
           ) : null
         }
@@ -90,14 +90,14 @@ export function Progress({ state, day }: ViewProps) {
               <span>
                 {weights[0].w}kg · {weights[0].k.slice(5)}
               </span>
-              <span>Hadaf: {state.profile.goalWeightKg}kg</span>
+              <span>Goal: {state.profile.goalWeightKg}kg</span>
               <span>
                 {weights[weights.length - 1].w}kg · {weights[weights.length - 1].k.slice(5)}
               </span>
             </div>
           </div>
         ) : (
-          <p className="text-sm text-bone/50">Sejel l wazn dyalek kol sba7 f &quot;Lyoum&quot; bach yban lik l progress hna.</p>
+          <p className="text-sm text-bone/50">Log your weight each morning on &quot;Today&quot; to see your progress here.</p>
         )}
       </Card>
     </div>

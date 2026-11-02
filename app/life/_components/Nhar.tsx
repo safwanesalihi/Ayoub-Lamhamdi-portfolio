@@ -32,10 +32,10 @@ export function Nhar({ state, log, isToday, now, setDay, update }: ViewProps) {
   return (
     <div className="grid gap-4 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
       <Card
-        title="Takssim dyal nhar"
+        title="Day plan"
         right={
           <button type="button" className="text-xs text-accent" onClick={() => setEdit((e) => !e)}>
-            {edit ? "Sala ✓" : "Bdel l planning"}
+            {edit ? "Done ✓" : "Edit plan"}
           </button>
         }
       >
@@ -63,7 +63,7 @@ export function Nhar({ state, log, isToday, now, setDay, update }: ViewProps) {
                     className="text-xs text-[#E07A5F]"
                     onClick={() => update((st) => ({ ...st, schedule: st.schedule.filter((x) => x.id !== b.id) }))}
                   >
-                    Msa7
+                    Remove
                   </button>
                 </li>
               );
@@ -80,7 +80,7 @@ export function Nhar({ state, log, isToday, now, setDay, update }: ViewProps) {
                   <span className="h-6 w-1 shrink-0 rounded-full" style={{ background: color }} />
                   <span className={`flex-1 text-sm ${log.blocksDone[b.id] ? "text-bone/40 line-through" : ""}`}>
                     {b.title}
-                    {live && <span className="ml-2 text-[10px] text-accent">● DABA</span>}
+                    {live && <span className="ml-2 text-[10px] text-accent">● NOW</span>}
                   </span>
                   <span
                     className="grid h-5 w-5 shrink-0 place-items-center rounded-md border text-[11px] text-ink"
@@ -97,15 +97,15 @@ export function Nhar({ state, log, isToday, now, setDay, update }: ViewProps) {
           <button
             type="button"
             className={`${ghostBtnCls} mt-3`}
-            onClick={() => update((s) => ({ ...s, schedule: [...s.schedule, { id: uid(), start: "12:00", end: "13:00", title: "Bloc jdid", area: "khedma" }] }))}
+            onClick={() => update((s) => ({ ...s, schedule: [...s.schedule, { id: uid(), start: "12:00", end: "13:00", title: "New block", area: "khedma" }] }))}
           >
-            + Zid bloc
+            + Add block
           </button>
         )}
       </Card>
 
       <div className="grid content-start gap-4">
-        <Card title="Jawanib l7ayat — wa9t">
+        <Card title="Life areas — time">
           <div className="mb-4 flex h-3 overflow-hidden rounded-full">
             {AREA_KEYS.map((k) => (
               <div key={k} style={{ width: `${(split[k] / totalMin) * 100}%`, background: AREAS[k].color }} title={AREAS[k].label} />
@@ -131,7 +131,7 @@ export function Nhar({ state, log, isToday, now, setDay, update }: ViewProps) {
           </ul>
         </Card>
 
-        <Card title="To-do dyal lyoum">
+        <Card title="Today's to-dos">
           <form
             className="flex gap-2"
             onSubmit={(e) => {
@@ -141,8 +141,8 @@ export function Nhar({ state, log, isToday, now, setDay, update }: ViewProps) {
               setTaskText("");
             }}
           >
-            <input className={inputCls} placeholder="Chno khassek dir…" value={taskText} onChange={(e) => setTaskText(e.target.value)} />
-            <select className={`${inputCls} w-28`} value={taskArea} onChange={(e) => setTaskArea(e.target.value as AreaKey)} aria-label="Janib">
+            <input className={inputCls} placeholder="What needs doing…" value={taskText} onChange={(e) => setTaskText(e.target.value)} />
+            <select className={`${inputCls} w-28`} value={taskArea} onChange={(e) => setTaskArea(e.target.value as AreaKey)} aria-label="Area">
               {AREA_KEYS.map((k) => (
                 <option key={k} value={k} className="bg-ink">
                   {AREAS[k].label}
@@ -163,19 +163,19 @@ export function Nhar({ state, log, isToday, now, setDay, update }: ViewProps) {
                     {t.text} <span className="text-[10px] text-bone/40">· {AREAS[t.area].label}</span>
                   </Check>
                 </div>
-                <button type="button" aria-label="Msa7" className="px-1 text-bone/30 hover:text-[#E07A5F]" onClick={() => setDay((d) => ({ ...d, tasks: d.tasks.filter((x) => x.id !== t.id) }))}>
+                <button type="button" aria-label="Remove" className="px-1 text-bone/30 hover:text-[#E07A5F]" onClick={() => setDay((d) => ({ ...d, tasks: d.tasks.filter((x) => x.id !== t.id) }))}>
                   ✕
                 </button>
               </div>
             ))}
-            {log.tasks.length === 0 && <p className="text-xs text-bone/40">Kteb 3 7wayej muhimmin (MIT) li ila derthom nhar dyalek nja7.</p>}
+            {log.tasks.length === 0 && <p className="text-xs text-bone/40">Write your 3 most important tasks — if they get done, the day is a win.</p>}
           </div>
         </Card>
 
-        <Card title="Muhasaba — chno t3lmt lyoum?">
+        <Card title="Reflection — what did today teach you?">
           <textarea
             className={`${inputCls} min-h-[110px]`}
-            placeholder="Chno mcha mzyan? Chno n7ssen ghedda? Chokr 3la…"
+            placeholder="What went well? What to improve tomorrow? Grateful for…"
             value={log.note}
             onChange={(e) => setDay((d) => ({ ...d, note: e.target.value }))}
           />

@@ -3,7 +3,7 @@ import { LifeApp } from "./LifeApp";
 
 export const metadata: Metadata = {
   title: "Life — Daily tracker",
-  description: "Salat, gym, makla w productivity — kol nhar.",
+  description: "Prayer, training, nutrition and productivity — every day.",
   robots: { index: false, follow: false },
 };
 

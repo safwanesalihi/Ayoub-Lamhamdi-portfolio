@@ -69,14 +69,14 @@ export function Bar({ value, max, color = "#C9A66B", label, unit = "" }: { value
 export function Stepper({ value, onChange, step = 1, min = 0, suffix }: { value: number; onChange: (v: number) => void; step?: number; min?: number; suffix?: string }) {
   return (
     <div className="inline-flex items-center rounded-full border border-white/15">
-      <button type="button" aria-label="N9ss" className="h-9 w-9 text-lg text-bone/70 hover:text-bone" onClick={() => onChange(Math.max(min, +(value - step).toFixed(2)))}>
+      <button type="button" aria-label="Decrease" className="h-9 w-9 text-lg text-bone/70 hover:text-bone" onClick={() => onChange(Math.max(min, +(value - step).toFixed(2)))}>
         −
       </button>
       <span className="min-w-[3.5rem] text-center text-sm tabular-nums">
         {value}
         {suffix}
       </span>
-      <button type="button" aria-label="Zid" className="h-9 w-9 text-lg text-bone/70 hover:text-bone" onClick={() => onChange(+(value + step).toFixed(2))}>
+      <button type="button" aria-label="Increase" className="h-9 w-9 text-lg text-bone/70 hover:text-bone" onClick={() => onChange(+(value + step).toFixed(2))}>
         +
       </button>
     </div>

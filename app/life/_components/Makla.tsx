@@ -22,7 +22,7 @@ export function Makla({ state, log, setDay }: ViewProps) {
   return (
     <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
       <div className="grid content-start gap-4">
-        <Card title="Hadaf dyal lyoum — lean bulk">
+        <Card title="Today's targets — lean bulk">
           <div className="space-y-3">
             <Bar label="Calories" value={tot.kcal} max={t.kcal} color="#E5C07B" />
             <Bar label="Protein" value={tot.protein} max={t.protein} unit="g" color="#7FB77E" />
@@ -30,13 +30,13 @@ export function Makla({ state, log, setDay }: ViewProps) {
             <Bar label="Fat" value={tot.fat} max={t.fat} unit="g" color="#E59A7A" />
           </div>
           <p className="mt-4 text-xs leading-relaxed text-bone/50">
-            Maintenance dyalek ≈ {t.maintenance} kcal. Bach tzid l3adalat bla chi7am: +{state.profile.surplus} kcal, protein {t.protein}g (2g/kg). Hadaf: +0.25 → 0.5 kg f simana.
+            Your maintenance ≈ {t.maintenance} kcal. To build muscle without much fat: +{state.profile.surplus} kcal and {t.protein}g protein (2g/kg). Aim for +0.25 to 0.5 kg per week.
           </p>
         </Card>
 
-        <Card title="Chno klit lyoum">
+        <Card title="Eaten today">
           {log.meals.length === 0 ? (
-            <p className="text-sm text-bone/50">Mazal ma sejelti walo.</p>
+            <p className="text-sm text-bone/50">Nothing logged yet.</p>
           ) : (
             <ul className="divide-y divide-white/5">
               {log.meals.map((m) => (
@@ -44,7 +44,7 @@ export function Makla({ state, log, setDay }: ViewProps) {
                   <span className="truncate">{m.name}</span>
                   <span className="flex shrink-0 items-center gap-3 tabular-nums text-bone/60">
                     {Math.round(m.kcal)} kcal · {Math.round(m.protein)}g P
-                    <button type="button" aria-label="Msa7" onClick={() => remove(m.id)} className="text-bone/40 hover:text-[#E07A5F]">
+                    <button type="button" aria-label="Remove" onClick={() => remove(m.id)} className="text-bone/40 hover:text-[#E07A5F]">
                       ✕
                     </button>
                   </span>
@@ -54,10 +54,10 @@ export function Makla({ state, log, setDay }: ViewProps) {
           )}
         </Card>
 
-        <Card title="Zid makla">
+        <Card title="Add food">
           <div className="flex gap-2">
-            <input className={inputCls} placeholder="9leb: djaj, bid, chofan…" value={q} onChange={(e) => setQ(e.target.value)} />
-            <select className={`${inputCls} w-24`} value={qty} onChange={(e) => setQty(Number(e.target.value))} aria-label="Ch7al">
+            <input className={inputCls} placeholder="Search: chicken, eggs, oats…" value={q} onChange={(e) => setQ(e.target.value)} />
+            <select className={`${inputCls} w-24`} value={qty} onChange={(e) => setQty(Number(e.target.value))} aria-label="Servings">
               {[0.5, 1, 1.5, 2, 3, 4].map((n) => (
                 <option key={n} value={n} className="bg-ink">
                   ×{n}
@@ -89,16 +89,16 @@ export function Makla({ state, log, setDay }: ViewProps) {
               setCustom({ name: "", kcal: "", protein: "" });
             }}
           >
-            <input className={inputCls} placeholder="Chi 7aja khra" value={custom.name} onChange={(e) => setCustom({ ...custom, name: e.target.value })} />
+            <input className={inputCls} placeholder="Something else" value={custom.name} onChange={(e) => setCustom({ ...custom, name: e.target.value })} />
             <input className={inputCls} placeholder="kcal" inputMode="numeric" value={custom.kcal} onChange={(e) => setCustom({ ...custom, kcal: e.target.value })} />
-            <input className={inputCls} placeholder="prot g" inputMode="numeric" value={custom.protein} onChange={(e) => setCustom({ ...custom, protein: e.target.value })} />
+            <input className={inputCls} placeholder="protein g" inputMode="numeric" value={custom.protein} onChange={(e) => setCustom({ ...custom, protein: e.target.value })} />
             <button className={btnCls}>+</button>
           </form>
         </Card>
       </div>
 
-      <Card title={`Plan dyal makla — ${t.kcal} kcal`}>
-        <p className="mb-4 text-xs text-bone/50">Coach 7seb lik had l plan 3la 7sab wazn dyalek. Clicky &quot;Klitha&quot; bach tsejelha.</p>
+      <Card title={`Meal plan — ${t.kcal} kcal`}>
+        <p className="mb-4 text-xs text-bone/50">Scaled to your weight and calorie target. Tap &quot;Ate this&quot; to log a meal.</p>
         <div className="space-y-3">
           {plan.map((m) => (
             <div key={m.name} className="rounded-xl border border-white/10 p-3">
@@ -130,14 +130,14 @@ export function Makla({ state, log, setDay }: ViewProps) {
                   })
                 }
               >
-                Klitha ✓
+                Ate this ✓
               </button>
             </div>
           ))}
         </div>
         <div className="mt-4 rounded-xl bg-white/[0.04] p-3 text-[12px] leading-relaxed text-bone/60">
-          <b className="font-normal text-bone">Nasa2i7:</b> protein f kol wajba (30-40g) · carbs 9bel w mor l gym · khodra kol nhar · creatine 5g/nhar (optional, mzyana) ·
-          ila ma 9dertich takol bzaf → chreb calories (smoothie: 7lib + banane + chofan + zebda kawkaw).
+          <b className="font-normal text-bone">Tips:</b> 30-40g protein every meal · carbs before and after training · vegetables daily · creatine 5g/day (optional, well proven) ·
+          if eating enough is hard, drink calories (smoothie: milk + banana + oats + peanut butter).
         </div>
       </Card>
     </div>

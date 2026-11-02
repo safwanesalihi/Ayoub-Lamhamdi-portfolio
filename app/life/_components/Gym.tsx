@@ -52,7 +52,7 @@ export function Gym({ state, day, log, setDay }: ViewProps) {
 
   return (
     <div className="grid gap-4">
-      <Card title={`Barnamaj — ${state.profile.trainingDays} ayam f simana (hypertrophy)`}>
+      <Card title={`Program — ${state.profile.trainingDays} days a week (hypertrophy)`}>
         <div className="grid grid-cols-7 gap-1.5">
           {plan.map((k, i) => (
             <div key={i} className={`rounded-lg border p-2 text-center ${i === todayIdx ? "border-accent" : "border-white/10"}`}>
@@ -62,19 +62,19 @@ export function Gym({ state, day, log, setDay }: ViewProps) {
           ))}
         </div>
         <p className="mt-3 text-xs leading-relaxed text-bone/50">
-          Qa3ida: kol set 1-2 reps 9bel l failure. Mlli tdir l7ad l fo9ani dyal reps f ga3 sets → zid 2.5kg. Bdel l barnamaj f Settings.
+          Rule: stop every set 1-2 reps short of failure. When you hit the top of the rep range on all sets, add 2.5kg. Change the program in Settings.
         </p>
       </Card>
 
-      <Card title="Ra7a bin sets">
+      <Card title="Rest timer">
         <RestTimer />
       </Card>
 
       {!wk ? (
-        <Card title="Lyoum nhar ra7a">
-          <p className="text-sm text-bone/70">L3adalat katkber mlli katrta7. Mchi 8-10k khatwa, dir stretching, w kol l makla dyalek kamla.</p>
+        <Card title="Today is a rest day">
+          <p className="text-sm text-bone/70">Muscle grows while you recover. Walk 8-10k steps, stretch, and eat your full targets.</p>
           <div className="mt-4 flex flex-wrap gap-2">
-            <span className="text-xs text-bone/50">Bghiti tdrb ga3?</span>
+            <span className="text-xs text-bone/50">Want to train anyway?</span>
             {(Object.keys(WORKOUTS) as (keyof typeof WORKOUTS)[]).map((k) => (
               <button key={k} type="button" onClick={() => setOverride(k)} className="rounded-full border border-white/15 px-3 py-1 text-xs">
                 {WORKOUTS[k].name}
@@ -94,7 +94,7 @@ export function Gym({ state, day, log, setDay }: ViewProps) {
               className={log.workoutDone ? "rounded-full bg-[#7FB77E] px-4 py-2 text-sm text-ink" : btnCls}
               onClick={() => setDay((d) => ({ ...d, workoutDone: !d.workoutDone }))}
             >
-              {log.workoutDone ? "Workout sala ✓" : "Salit l workout"}
+              {log.workoutDone ? "Workout done ✓" : "Finish workout"}
             </button>
           </div>
 
@@ -110,7 +110,7 @@ export function Gym({ state, day, log, setDay }: ViewProps) {
                       <div className="text-base">{e.name}</div>
                       <div className="text-xs text-bone/50">
                         {e.sets} × {e.reps[0]}-{e.reps[1]}
-                        {e.timed ? "s" : " reps"} · ra7a {e.rest}s
+                        {e.timed ? "s" : " reps"} · rest {e.rest}s
                       </div>
                     </div>
                   </div>

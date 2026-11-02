@@ -17,11 +17,11 @@ function scoreColor(v: number) {
 }
 
 function scoreWord(v: number) {
-  if (v >= 90) return "Wa7ch 🔥";
-  if (v >= 75) return "Montij";
-  if (v >= 55) return "Mzyan — kmmel";
-  if (v >= 30) return "Ba9i lkhedma";
-  return "Yallah nbdaw";
+  if (v >= 90) return "Beast mode 🔥";
+  if (v >= 75) return "Productive";
+  if (v >= 55) return "Good — keep going";
+  if (v >= 30) return "Work to do";
+  return "Let's get started";
 }
 
 export function Today(props: ViewProps) {
@@ -44,7 +44,7 @@ export function Today(props: ViewProps) {
   return (
     <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
       <div className="grid gap-4">
-        <Card title="Productivity dyal nhar">
+        <Card title="Today's productivity">
           <div className="flex flex-wrap items-center gap-6">
             <Ring value={total / 100} size={150} color={scoreColor(total)}>
               <div>
@@ -71,7 +71,7 @@ export function Today(props: ViewProps) {
         </Card>
 
         {current && (
-          <Card title="Daba khassek tkon f">
+          <Card title="Right now">
             <div className="flex items-center gap-3">
               <span className="h-10 w-1.5 rounded-full" style={{ background: AREAS[current.area].color }} />
               <div className="flex-1">
@@ -85,13 +85,13 @@ export function Today(props: ViewProps) {
                 onClick={() => setDay((d) => ({ ...d, blocksDone: { ...d.blocksDone, [current.id]: !d.blocksDone[current.id] } }))}
                 className={`rounded-full px-3 py-1.5 text-xs ${log.blocksDone[current.id] ? "bg-[#7FB77E] text-ink" : "border border-white/20 text-bone/80"}`}
               >
-                {log.blocksDone[current.id] ? "Sala ✓" : "Salit"}
+                {log.blocksDone[current.id] ? "Done ✓" : "Mark done"}
               </button>
             </div>
           </Card>
         )}
 
-        <Card title="Salat" right={<button className="text-xs text-accent" onClick={() => go("salat")}>Kolchi →</button>}>
+        <Card title="Salat" right={<button className="text-xs text-accent" onClick={() => go("salat")}>All →</button>}>
           <div className="grid grid-cols-5 gap-2">
             {PRAYERS.map((p) => {
               const st = log.prayers[p.key];
@@ -121,18 +121,18 @@ export function Today(props: ViewProps) {
         <Card title="Quick log">
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <div className="mb-2 text-xs text-bone/60">Lma (kisan)</div>
+              <div className="mb-2 text-xs text-bone/60">Water (glasses)</div>
               <div className="flex items-center gap-3">
                 <Stepper value={log.water} onChange={(v) => setDay((d) => ({ ...d, water: v }))} />
                 <span className="text-xs text-bone/40">/ {state.profile.waterGoal}</span>
               </div>
             </div>
             <div>
-              <div className="mb-2 text-xs text-bone/60">N3as (sa3at)</div>
+              <div className="mb-2 text-xs text-bone/60">Sleep (hours)</div>
               <Stepper value={log.sleepHours ?? 0} step={0.5} onChange={(v) => setDay((d) => ({ ...d, sleepHours: v }))} suffix="h" />
             </div>
             <div>
-              <div className="mb-2 text-xs text-bone/60">Wazn (kg) — sba7</div>
+              <div className="mb-2 text-xs text-bone/60">Weight (kg) — morning</div>
               <Stepper
                 value={log.weight ?? state.profile.weightKg}
                 step={0.1}
@@ -143,7 +143,7 @@ export function Today(props: ViewProps) {
               />
             </div>
             <div>
-              <div className="mb-2 text-xs text-bone/60">Qur2an (sf7at)</div>
+              <div className="mb-2 text-xs text-bone/60">Quran (pages)</div>
               <Stepper value={log.quranPages} onChange={(v) => setDay((d) => ({ ...d, quranPages: v }))} />
             </div>
           </div>
@@ -151,7 +151,7 @@ export function Today(props: ViewProps) {
       </div>
 
       <div className="grid content-start gap-4">
-        <Card title="Coach dyalek">
+        <Card title="Your coach">
           <ul className="space-y-2.5">
             {tips.map((tip, i) => (
               <li key={i} className="rounded-xl px-3.5 py-3" style={{ background: TONE[tip.tone].bg }}>
@@ -166,23 +166,23 @@ export function Today(props: ViewProps) {
         </Card>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <Card title="Gym lyoum" right={<button className="text-xs text-accent" onClick={() => go("gym")}>Bda →</button>}>
+          <Card title="Today's workout" right={<button className="text-xs text-accent" onClick={() => go("gym")}>Start →</button>}>
             {w ? (
               <>
                 <div className="display text-3xl">{WORKOUTS[w].name}</div>
                 <div className="mt-1 text-xs text-bone/50">{WORKOUTS[w].focus}</div>
                 <div className={`mt-3 inline-block rounded-full px-2.5 py-1 text-[11px] ${log.workoutDone ? "bg-[#7FB77E] text-ink" : "bg-white/10 text-bone/70"}`}>
-                  {log.workoutDone ? "Sala ✓" : `${WORKOUTS[w].exercises.length} tamarin`}
+                  {log.workoutDone ? "Done ✓" : `${WORKOUTS[w].exercises.length} exercises`}
                 </div>
               </>
             ) : (
               <>
-                <div className="display text-3xl">Ra7a</div>
-                <div className="mt-1 text-xs text-bone/50">Recovery — mchi, stretching</div>
+                <div className="display text-3xl">Rest</div>
+                <div className="mt-1 text-xs text-bone/50">Recovery — walk and stretch</div>
               </>
             )}
           </Card>
-          <Card title="Makla" right={<button className="text-xs text-accent" onClick={() => go("makla")}>Zid →</button>}>
+          <Card title="Food" right={<button className="text-xs text-accent" onClick={() => go("makla")}>Log →</button>}>
             <div className="space-y-3">
               <Bar label="Calories" value={tot.kcal} max={t.kcal} color="#E5C07B" />
               <Bar label="Protein" value={tot.protein} max={t.protein} unit="g" color="#7FB77E" />

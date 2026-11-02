@@ -32,7 +32,7 @@ export function fromKey(key: string): Date {
   return new Date(y, m - 1, d);
 }
 
-export const WEEKDAYS = ["L7ed", "Tnin", "Tlat", "Larb3", "Lkhmis", "Jem3a", "Sebt"];
+export const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 export function toMinutes(hhmm: string): number {
   const [h, m] = hhmm.split(":").map(Number);
@@ -48,12 +48,12 @@ export function uid(): string {
 /* ------------------------------------------------------------------ */
 
 export const AREAS: Record<AreaKey, { label: string; color: string }> = {
-  deen: { label: "Dine", color: "#C9A66B" },
-  sa7a: { label: "Sa7a & Gym", color: "#7FB77E" },
-  khedma: { label: "Khedma", color: "#6FA8DC" },
-  ta3allom: { label: "Ta3allom", color: "#B48EDB" },
-  "3a2ila": { label: "3a2ila & Nas", color: "#E59A7A" },
-  ra7a: { label: "Ra7a & N3as", color: "#8A8580" },
+  deen: { label: "Faith", color: "#C9A66B" },
+  sa7a: { label: "Health & gym", color: "#7FB77E" },
+  khedma: { label: "Work", color: "#6FA8DC" },
+  ta3allom: { label: "Learning", color: "#B48EDB" },
+  "3a2ila": { label: "Family & people", color: "#E59A7A" },
+  ra7a: { label: "Rest & sleep", color: "#8A8580" },
 };
 
 /* ------------------------------------------------------------------ */
@@ -61,18 +61,18 @@ export const AREAS: Record<AreaKey, { label: string; color: string }> = {
 /* ------------------------------------------------------------------ */
 
 export const PRAYERS: { key: PrayerKey; label: string; api: string }[] = [
-  { key: "fajr", label: "Sbo7 (Fajr)", api: "Fajr" },
-  { key: "dhuhr", label: "Dhor", api: "Dhuhr" },
-  { key: "asr", label: "L3asr", api: "Asr" },
-  { key: "maghrib", label: "Lmaghrib", api: "Maghrib" },
-  { key: "isha", label: "L3cha", api: "Isha" },
+  { key: "fajr", label: "Fajr", api: "Fajr" },
+  { key: "dhuhr", label: "Dhuhr", api: "Dhuhr" },
+  { key: "asr", label: "Asr", api: "Asr" },
+  { key: "maghrib", label: "Maghrib", api: "Maghrib" },
+  { key: "isha", label: "Isha", api: "Isha" },
 ];
 
 export const PRAYER_STATUS: { key: PrayerStatus; label: string; points: number }[] = [
-  { key: "jamaa", label: "F jama3a", points: 1 },
-  { key: "ontime", label: "F lwa9t", points: 0.85 },
-  { key: "late", label: "M3etel", points: 0.4 },
-  { key: "missed", label: "Fatetni", points: 0 },
+  { key: "jamaa", label: "In jama'ah", points: 1 },
+  { key: "ontime", label: "On time", points: 0.85 },
+  { key: "late", label: "Late", points: 0.4 },
+  { key: "missed", label: "Missed", points: 0 },
 ];
 
 export type PrayerTimes = Partial<Record<PrayerKey | "sunrise", string>>;
@@ -93,33 +93,33 @@ export type Exercise = {
 };
 
 const EX: Record<string, Omit<Exercise, "sets" | "reps">> = {
-  bench: { id: "bench", name: "Bench press (barre)", rest: 150, tip: "Kotfin lteht w lor, rjlik tabtin f l2ard." },
-  incline_db: { id: "incline_db", name: "Incline dumbbell press", rest: 120, tip: "Banc 30°, hbet b chwiya 2-3 tawani." },
-  incline_bb: { id: "incline_bb", name: "Incline bench press", rest: 150, tip: "Barre katnzel l fou9 sder." },
-  ohp: { id: "ohp", name: "Overhead press", rest: 120, tip: "Sedd kerch w tiz, ma t3wejch dahrek." },
-  db_shoulder: { id: "db_shoulder", name: "Dumbbell shoulder press", rest: 120, tip: "Ma tsedch lfo9 ga3 bach tb9a tension." },
-  lateral: { id: "lateral", name: "Lateral raise", rest: 60, tip: "Wzen khfif, control, l coude 9dam chwiya." },
-  fly: { id: "fly", name: "Cable / pec-deck fly", rest: 75, tip: "Stretch mzyan f lteht, squeeze f lwest." },
-  pushdown: { id: "pushdown", name: "Triceps pushdown", rest: 60, tip: "Coudes msedin m3a jnab." },
-  oh_triceps: { id: "oh_triceps", name: "Overhead triceps extension", rest: 75, tip: "Stretch kamel mor rasek." },
-  pullup: { id: "pullup", name: "Pull-up / Lat pulldown", rest: 120, tip: "Jbed b coudes, sder l fou9." },
-  row: { id: "row", name: "Barbell row", rest: 120, tip: "Dahr msta9im, jbed l kerch." },
-  cable_row: { id: "cable_row", name: "Seated cable row", rest: 90, tip: "Hbes 1s f squeeze." },
-  cs_row: { id: "cs_row", name: "Chest-supported row", rest: 90, tip: "Ma t3awnch b jsdek." },
-  facepull: { id: "facepull", name: "Face pull", rest: 60, tip: "Jbed l wjhek w 7el yeddik l barra." },
-  curl: { id: "curl", name: "Barbell / EZ curl", rest: 75, tip: "Ma tswingich, coudes tabtin." },
-  hammer: { id: "hammer", name: "Hammer curl", rest: 60, tip: "Kaybni brachialis — dra3 kayghla9." },
-  squat: { id: "squat", name: "Back squat", rest: 180, tip: "Nzel 7ta lfkhad parallèle, rkabi m3a sabi3." },
-  rdl: { id: "rdl", name: "Romanian deadlift", rest: 150, tip: "Dfe3 tiz lor, stretch f hamstrings." },
-  deadlift: { id: "deadlift", name: "Deadlift", rest: 180, tip: "Barre lassa9 m3a rjlik, dahr neutre." },
-  legpress: { id: "legpress", name: "Leg press", rest: 120, tip: "Ma tsedch rkabi f lfo9." },
-  legcurl: { id: "legcurl", name: "Leg curl", rest: 75, tip: "Control f nzoul (3 tawani)." },
-  legext: { id: "legext", name: "Leg extension", rest: 75, tip: "Hbes 1s f lfo9." },
-  bss: { id: "bss", name: "Bulgarian split squat", rest: 90, tip: "Rjel lor 3la banc, nzel ntit." },
-  lunge: { id: "lunge", name: "Walking lunges", rest: 90, tip: "Khatwa twila l glutes." },
-  calf: { id: "calf", name: "Calf raise", rest: 60, tip: "Stretch kamel + hbes f lfo9." },
-  plank: { id: "plank", name: "Plank", rest: 45, tip: "Kerch mzyar, ma t9ttchi tiz.", timed: true },
-  legraise: { id: "legraise", name: "Hanging leg raise", rest: 60, tip: "Ma tswingich." },
+  bench: { id: "bench", name: "Barbell bench press", rest: 150, tip: "Shoulder blades down and back, feet planted." },
+  incline_db: { id: "incline_db", name: "Incline dumbbell press", rest: 120, tip: "30° bench, lower over 2-3 seconds." },
+  incline_bb: { id: "incline_bb", name: "Incline bench press", rest: 150, tip: "Bar touches the upper chest." },
+  ohp: { id: "ohp", name: "Overhead press", rest: 120, tip: "Brace abs and glutes, don't arch your back." },
+  db_shoulder: { id: "db_shoulder", name: "Dumbbell shoulder press", rest: 120, tip: "Stop just short of lockout to keep tension." },
+  lateral: { id: "lateral", name: "Lateral raise", rest: 60, tip: "Light weight, controlled, elbows slightly forward." },
+  fly: { id: "fly", name: "Cable / pec-deck fly", rest: 75, tip: "Deep stretch at the bottom, squeeze in the middle." },
+  pushdown: { id: "pushdown", name: "Triceps pushdown", rest: 60, tip: "Elbows pinned to your sides." },
+  oh_triceps: { id: "oh_triceps", name: "Overhead triceps extension", rest: 75, tip: "Full stretch behind your head." },
+  pullup: { id: "pullup", name: "Pull-up / Lat pulldown", rest: 120, tip: "Pull with your elbows, chest up." },
+  row: { id: "row", name: "Barbell row", rest: 120, tip: "Flat back, pull to your belly." },
+  cable_row: { id: "cable_row", name: "Seated cable row", rest: 90, tip: "Hold the squeeze for 1 second." },
+  cs_row: { id: "cs_row", name: "Chest-supported row", rest: 90, tip: "No body English." },
+  facepull: { id: "facepull", name: "Face pull", rest: 60, tip: "Pull to your face and rotate hands out." },
+  curl: { id: "curl", name: "Barbell / EZ curl", rest: 75, tip: "No swinging, elbows fixed." },
+  hammer: { id: "hammer", name: "Hammer curl", rest: 60, tip: "Builds the brachialis for thicker arms." },
+  squat: { id: "squat", name: "Back squat", rest: 180, tip: "Thighs to parallel, knees track over toes." },
+  rdl: { id: "rdl", name: "Romanian deadlift", rest: 150, tip: "Push hips back, feel the hamstring stretch." },
+  deadlift: { id: "deadlift", name: "Deadlift", rest: 180, tip: "Bar close to your legs, neutral back." },
+  legpress: { id: "legpress", name: "Leg press", rest: 120, tip: "Don't lock your knees at the top." },
+  legcurl: { id: "legcurl", name: "Leg curl", rest: 75, tip: "Control the lowering (3 seconds)." },
+  legext: { id: "legext", name: "Leg extension", rest: 75, tip: "Hold 1 second at the top." },
+  bss: { id: "bss", name: "Bulgarian split squat", rest: 90, tip: "Rear foot on a bench, drop straight down." },
+  lunge: { id: "lunge", name: "Walking lunges", rest: 90, tip: "Long strides to hit the glutes." },
+  calf: { id: "calf", name: "Calf raise", rest: 60, tip: "Full stretch, hold at the top." },
+  plank: { id: "plank", name: "Plank", rest: 45, tip: "Abs tight, don't let hips sag.", timed: true },
+  legraise: { id: "legraise", name: "Hanging leg raise", rest: 60, tip: "No swinging." },
 };
 
 function ex(id: string, sets: number, lo: number, hi: number): Exercise {
@@ -131,37 +131,37 @@ export type WorkoutKey = "push" | "pull" | "legs" | "upper" | "lower" | "fullA" 
 export const WORKOUTS: Record<WorkoutKey, { name: string; focus: string; exercises: Exercise[] }> = {
   push: {
     name: "Push",
-    focus: "Sder · Ktaf · Triceps",
+    focus: "Chest · Shoulders · Triceps",
     exercises: [ex("bench", 4, 6, 10), ex("incline_db", 3, 8, 12), ex("ohp", 3, 8, 10), ex("lateral", 4, 12, 20), ex("fly", 3, 12, 15), ex("pushdown", 3, 10, 15)],
   },
   pull: {
     name: "Pull",
-    focus: "Dahr · Biceps",
+    focus: "Back · Biceps",
     exercises: [ex("pullup", 4, 6, 10), ex("row", 4, 8, 10), ex("cable_row", 3, 10, 12), ex("facepull", 3, 15, 20), ex("curl", 3, 8, 12), ex("hammer", 3, 10, 15)],
   },
   legs: {
     name: "Legs",
-    focus: "Rjlin · Core",
+    focus: "Legs · Core",
     exercises: [ex("squat", 4, 6, 10), ex("rdl", 3, 8, 10), ex("legpress", 3, 10, 15), ex("legcurl", 3, 10, 15), ex("calf", 4, 12, 20), ex("plank", 3, 30, 60)],
   },
   upper: {
     name: "Upper",
-    focus: "Jesm l fo9ani",
+    focus: "Upper body",
     exercises: [ex("incline_bb", 4, 6, 10), ex("pullup", 4, 8, 10), ex("db_shoulder", 3, 8, 12), ex("cs_row", 3, 10, 12), ex("lateral", 3, 15, 20), ex("curl", 3, 10, 12), ex("oh_triceps", 3, 10, 12)],
   },
   lower: {
     name: "Lower",
-    focus: "Jesm t7tani",
+    focus: "Lower body",
     exercises: [ex("deadlift", 3, 5, 8), ex("bss", 3, 8, 12), ex("legext", 3, 12, 15), ex("legcurl", 3, 10, 15), ex("calf", 4, 10, 15), ex("legraise", 3, 10, 15)],
   },
   fullA: {
     name: "Full body A",
-    focus: "Jesm kaml",
+    focus: "Full body",
     exercises: [ex("squat", 3, 6, 10), ex("bench", 3, 6, 10), ex("row", 3, 8, 10), ex("ohp", 3, 8, 10), ex("curl", 2, 10, 12), ex("plank", 3, 30, 60)],
   },
   fullB: {
     name: "Full body B",
-    focus: "Jesm kaml",
+    focus: "Full body",
     exercises: [ex("rdl", 3, 8, 10), ex("incline_db", 3, 8, 12), ex("pullup", 3, 8, 12), ex("lunge", 3, 10, 12), ex("lateral", 3, 12, 20), ex("pushdown", 3, 10, 15)],
   },
 };
@@ -194,12 +194,12 @@ export function lastSets(state: LifeState, exId: string, beforeKey: string): { d
 
 /** Progressive overload suggestion. */
 export function overloadHint(e: Exercise, last: { sets: SetLog[] } | null): string {
-  if (!last) return e.timed ? `Bda b ${e.reps[0]}s` : "Awel mrra: khtar wzen t9der dir bih " + e.reps[1] + " reps b technique n9ia.";
+  if (!last) return e.timed ? `Start with ${e.reps[0]}s` : "First time: pick a weight you can do for " + e.reps[1] + " clean reps.";
   const top = Math.max(...last.sets.map((s) => s.w));
   const allTop = last.sets.length >= e.sets && last.sets.every((s) => s.r >= e.reps[1]);
-  if (e.timed) return `Lmrra li fatet ${Math.max(...last.sets.map((s) => s.r))}s → zid 5-10s.`;
-  if (allTop) return `Drt ${e.reps[1]} reps f ga3 sets b ${top}kg → zid l ${top + 2.5}kg lyoum 💪`;
-  return `Lmrra li fatet ${top}kg → b9a f nefs l wzen w zid rep wa7da f kol set.`;
+  if (e.timed) return `Last time ${Math.max(...last.sets.map((s) => s.r))}s → add 5-10s.`;
+  if (allTop) return `You hit ${e.reps[1]} reps on every set at ${top}kg → go ${top + 2.5}kg today 💪`;
+  return `Last time ${top}kg → same weight, aim for one more rep per set.`;
 }
 
 /* ------------------------------------------------------------------ */
@@ -209,36 +209,36 @@ export function overloadHint(e: Exercise, last: { sets: SetLog[] } | null): stri
 export type Food = { id: string; name: string; unit: string; kcal: number; protein: number; carbs: number; fat: number };
 
 export const FOODS: Food[] = [
-  { id: "bid", name: "Bid", unit: "1 bida", kcal: 75, protein: 6.5, carbs: 0.5, fat: 5 },
-  { id: "khobz", name: "Khobz kamel", unit: "rbe3 khobza", kcal: 140, protein: 5.5, carbs: 26, fat: 1.5 },
-  { id: "chofan", name: "Chofan (oats)", unit: "50g", kcal: 190, protein: 6.5, carbs: 33, fat: 3.5 },
-  { id: "7lib", name: "7lib", unit: "kas 250ml", kcal: 160, protein: 8, carbs: 12, fat: 9 },
-  { id: "raib", name: "Raib / Lben", unit: "1 kas", kcal: 120, protein: 7, carbs: 10, fat: 6 },
-  { id: "djaj", name: "Djaj (blanc)", unit: "100g mtyob", kcal: 165, protein: 31, carbs: 0, fat: 3.6 },
-  { id: "l7am", name: "L7am bgri", unit: "100g mtyob", kcal: 250, protein: 26, carbs: 0, fat: 15 },
+  { id: "bid", name: "Eggs", unit: "1 egg", kcal: 75, protein: 6.5, carbs: 0.5, fat: 5 },
+  { id: "khobz", name: "Whole-wheat bread", unit: "¼ loaf", kcal: 140, protein: 5.5, carbs: 26, fat: 1.5 },
+  { id: "chofan", name: "Oats", unit: "50g", kcal: 190, protein: 6.5, carbs: 33, fat: 3.5 },
+  { id: "7lib", name: "Milk", unit: "250ml glass", kcal: 160, protein: 8, carbs: 12, fat: 9 },
+  { id: "raib", name: "Raib / yogurt", unit: "1 cup", kcal: 120, protein: 7, carbs: 10, fat: 6 },
+  { id: "djaj", name: "Chicken breast", unit: "100g cooked", kcal: 165, protein: 31, carbs: 0, fat: 3.6 },
+  { id: "l7am", name: "Beef", unit: "100g cooked", kcal: 250, protein: 26, carbs: 0, fat: 15 },
   { id: "kefta", name: "Kefta", unit: "100g", kcal: 260, protein: 20, carbs: 2, fat: 19 },
-  { id: "sardine", name: "Sardine", unit: "1 boita", kcal: 220, protein: 25, carbs: 0, fat: 13 },
-  { id: "thon", name: "Thon", unit: "1 boita", kcal: 110, protein: 25, carbs: 0, fat: 1 },
-  { id: "7out", name: "7out", unit: "150g", kcal: 180, protein: 32, carbs: 0, fat: 5 },
-  { id: "rouz", name: "Rouz", unit: "100g mtyob", kcal: 130, protein: 2.7, carbs: 28, fat: 0.3 },
-  { id: "pates", name: "Pâtes", unit: "100g mtyobin", kcal: 155, protein: 5.5, carbs: 31, fat: 1 },
-  { id: "batata", name: "Batata", unit: "200g", kcal: 170, protein: 4, carbs: 38, fat: 0.2 },
-  { id: "l3des", name: "L3des", unit: "1 zlafa", kcal: 230, protein: 18, carbs: 40, fat: 1 },
-  { id: "loubia", name: "Loubia", unit: "1 zlafa", kcal: 250, protein: 15, carbs: 45, fat: 1 },
-  { id: "tajine", name: "Tajine djaj", unit: "1 portion", kcal: 450, protein: 35, carbs: 20, fat: 25 },
-  { id: "couscous", name: "Couscous", unit: "1 tobsil", kcal: 600, protein: 25, carbs: 90, fat: 15 },
-  { id: "7rira", name: "7rira", unit: "1 zlafa", kcal: 200, protein: 10, carbs: 30, fat: 4 },
+  { id: "sardine", name: "Sardines", unit: "1 can", kcal: 220, protein: 25, carbs: 0, fat: 13 },
+  { id: "thon", name: "Tuna", unit: "1 can", kcal: 110, protein: 25, carbs: 0, fat: 1 },
+  { id: "7out", name: "White fish", unit: "150g", kcal: 180, protein: 32, carbs: 0, fat: 5 },
+  { id: "rouz", name: "Rice", unit: "100g cooked", kcal: 130, protein: 2.7, carbs: 28, fat: 0.3 },
+  { id: "pates", name: "Pasta", unit: "100g cooked", kcal: 155, protein: 5.5, carbs: 31, fat: 1 },
+  { id: "batata", name: "Potatoes", unit: "200g", kcal: 170, protein: 4, carbs: 38, fat: 0.2 },
+  { id: "l3des", name: "Lentils", unit: "1 bowl", kcal: 230, protein: 18, carbs: 40, fat: 1 },
+  { id: "loubia", name: "White beans", unit: "1 bowl", kcal: 250, protein: 15, carbs: 45, fat: 1 },
+  { id: "tajine", name: "Chicken tagine", unit: "1 portion", kcal: 450, protein: 35, carbs: 20, fat: 25 },
+  { id: "couscous", name: "Couscous", unit: "1 plate", kcal: 600, protein: 25, carbs: 90, fat: 15 },
+  { id: "7rira", name: "Harira", unit: "1 bowl", kcal: 200, protein: 10, carbs: 30, fat: 4 },
   { id: "msemen", name: "Msemen", unit: "1", kcal: 300, protein: 6, carbs: 40, fat: 13 },
-  { id: "banane", name: "Banane", unit: "1", kcal: 105, protein: 1.3, carbs: 27, fat: 0.4 },
-  { id: "tfa7", name: "Tfa7a", unit: "1", kcal: 95, protein: 0.5, carbs: 25, fat: 0.3 },
-  { id: "tmer", name: "Tmer", unit: "3 tmrat", kcal: 70, protein: 0.6, carbs: 18, fat: 0 },
-  { id: "louz", name: "Louz / Gerga3", unit: "30g", kcal: 175, protein: 6, carbs: 6, fat: 15 },
-  { id: "pb", name: "Zebda kawkaw", unit: "1 m3al9a", kcal: 95, protein: 4, carbs: 3, fat: 8 },
-  { id: "zit", name: "Zit zitoun", unit: "1 m3al9a", kcal: 120, protein: 0, carbs: 0, fat: 14 },
-  { id: "jben", name: "Jben / Fromage", unit: "30g", kcal: 80, protein: 5, carbs: 1, fat: 6 },
-  { id: "avocat", name: "Avocat", unit: "nos", kcal: 160, protein: 2, carbs: 9, fat: 15 },
+  { id: "banane", name: "Banana", unit: "1", kcal: 105, protein: 1.3, carbs: 27, fat: 0.4 },
+  { id: "tfa7", name: "Apple", unit: "1", kcal: 95, protein: 0.5, carbs: 25, fat: 0.3 },
+  { id: "tmer", name: "Dates", unit: "3 dates", kcal: 70, protein: 0.6, carbs: 18, fat: 0 },
+  { id: "louz", name: "Almonds / walnuts", unit: "30g", kcal: 175, protein: 6, carbs: 6, fat: 15 },
+  { id: "pb", name: "Peanut butter", unit: "1 tbsp", kcal: 95, protein: 4, carbs: 3, fat: 8 },
+  { id: "zit", name: "Olive oil", unit: "1 tbsp", kcal: 120, protein: 0, carbs: 0, fat: 14 },
+  { id: "jben", name: "Cheese", unit: "30g", kcal: 80, protein: 5, carbs: 1, fat: 6 },
+  { id: "avocat", name: "Avocado", unit: "half", kcal: 160, protein: 2, carbs: 9, fat: 15 },
   { id: "whey", name: "Whey", unit: "1 scoop", kcal: 120, protein: 24, carbs: 3, fat: 1.5 },
-  { id: "salade", name: "Chlada", unit: "1 tobsil", kcal: 60, protein: 2, carbs: 10, fat: 2 },
+  { id: "salade", name: "Salad", unit: "1 plate", kcal: 60, protein: 2, carbs: 10, fat: 2 },
 ];
 
 export const FOOD_BY_ID = Object.fromEntries(FOODS.map((f) => [f.id, f]));
@@ -255,11 +255,11 @@ export function targets(p: Profile) {
 
 type PlanItem = { food: string; qty: number };
 const MEAL_TEMPLATE: { time: string; name: string; items: PlanItem[] }[] = [
-  { time: "07:30", name: "Ftour", items: [{ food: "bid", qty: 3 }, { food: "khobz", qty: 1 }, { food: "avocat", qty: 1 }, { food: "7lib", qty: 1 }] },
+  { time: "07:30", name: "Breakfast", items: [{ food: "bid", qty: 3 }, { food: "khobz", qty: 1 }, { food: "avocat", qty: 1 }, { food: "7lib", qty: 1 }] },
   { time: "11:00", name: "Snack", items: [{ food: "raib", qty: 1 }, { food: "banane", qty: 1 }, { food: "louz", qty: 1 }] },
-  { time: "14:00", name: "Lghda", items: [{ food: "djaj", qty: 2 }, { food: "rouz", qty: 2 }, { food: "salade", qty: 1 }, { food: "zit", qty: 1 }] },
-  { time: "17:00", name: "9bel l gym", items: [{ food: "chofan", qty: 1 }, { food: "banane", qty: 1 }, { food: "pb", qty: 1 }, { food: "7lib", qty: 1 }] },
-  { time: "21:00", name: "L3cha", items: [{ food: "thon", qty: 1 }, { food: "bid", qty: 2 }, { food: "khobz", qty: 1 }, { food: "salade", qty: 1 }] },
+  { time: "14:00", name: "Lunch", items: [{ food: "djaj", qty: 2 }, { food: "rouz", qty: 2 }, { food: "salade", qty: 1 }, { food: "zit", qty: 1 }] },
+  { time: "17:00", name: "Pre-workout", items: [{ food: "chofan", qty: 1 }, { food: "banane", qty: 1 }, { food: "pb", qty: 1 }, { food: "7lib", qty: 1 }] },
+  { time: "21:00", name: "Dinner", items: [{ food: "thon", qty: 1 }, { food: "bid", qty: 2 }, { food: "khobz", qty: 1 }, { food: "salade", qty: 1 }] },
 ];
 
 function sumItems(items: PlanItem[]) {
@@ -320,21 +320,45 @@ export const DEFAULT_PROFILE: Profile = {
 };
 
 export const DEFAULT_SCHEDULE: Block[] = [
-  { id: "b1", start: "05:45", end: "06:30", title: "Sbo7 + adhkar sabah + Qur2an", area: "deen" },
-  { id: "b2", start: "06:30", end: "07:30", title: "Sport khfif / mchi + douch", area: "sa7a" },
-  { id: "b3", start: "07:30", end: "08:00", title: "Ftour + planifier nhar", area: "sa7a" },
-  { id: "b4", start: "08:00", end: "12:30", title: "Deep work (bla telephone)", area: "khedma" },
-  { id: "b5", start: "12:30", end: "13:00", title: "Dhor", area: "deen" },
-  { id: "b6", start: "13:00", end: "14:00", title: "Lghda + ra7a", area: "ra7a" },
-  { id: "b7", start: "14:00", end: "16:30", title: "Khedma: meetings / tournage / montage", area: "khedma" },
-  { id: "b8", start: "16:30", end: "17:00", title: "L3asr + snack", area: "deen" },
+  { id: "b1", start: "05:45", end: "06:30", title: "Fajr + morning adhkar + Quran", area: "deen" },
+  { id: "b2", start: "06:30", end: "07:30", title: "Light movement / walk + shower", area: "sa7a" },
+  { id: "b3", start: "07:30", end: "08:00", title: "Breakfast + plan the day", area: "sa7a" },
+  { id: "b4", start: "08:00", end: "12:30", title: "Deep work (phone away)", area: "khedma" },
+  { id: "b5", start: "12:30", end: "13:00", title: "Dhuhr", area: "deen" },
+  { id: "b6", start: "13:00", end: "14:00", title: "Lunch + rest", area: "ra7a" },
+  { id: "b7", start: "14:00", end: "16:30", title: "Work: meetings / shoots / editing", area: "khedma" },
+  { id: "b8", start: "16:30", end: "17:00", title: "Asr + snack", area: "deen" },
   { id: "b9", start: "17:00", end: "18:30", title: "Gym", area: "sa7a" },
-  { id: "b10", start: "18:45", end: "19:15", title: "Lmaghrib + adhkar masa", area: "deen" },
-  { id: "b11", start: "19:15", end: "20:15", title: "Ta3allom: ktab / course", area: "ta3allom" },
-  { id: "b12", start: "20:15", end: "21:30", title: "L3cha (salat) + 3cha m3a l3a2ila", area: "3a2ila" },
-  { id: "b13", start: "21:30", end: "22:30", title: "Review nhar + to-do dyal ghedda", area: "ra7a" },
-  { id: "b14", start: "22:30", end: "05:30", title: "N3as (7h+)", area: "ra7a" },
+  { id: "b10", start: "18:45", end: "19:15", title: "Maghrib + evening adhkar", area: "deen" },
+  { id: "b11", start: "19:15", end: "20:15", title: "Learning: book / course", area: "ta3allom" },
+  { id: "b12", start: "20:15", end: "21:30", title: "Isha + dinner with family", area: "3a2ila" },
+  { id: "b13", start: "21:30", end: "22:30", title: "Review the day + plan tomorrow", area: "ra7a" },
+  { id: "b14", start: "22:30", end: "05:30", title: "Sleep (7h+)", area: "ra7a" },
 ];
+
+/** Default block titles from the first (Darija) version, mapped to English. */
+const LEGACY_TITLES: Record<string, string> = {
+  "Sbo7 + adhkar sabah + Qur2an": "Fajr + morning adhkar + Quran",
+  "Sport khfif / mchi + douch": "Light movement / walk + shower",
+  "Ftour + planifier nhar": "Breakfast + plan the day",
+  "Deep work (bla telephone)": "Deep work (phone away)",
+  Dhor: "Dhuhr",
+  "Lghda + ra7a": "Lunch + rest",
+  "Khedma: meetings / tournage / montage": "Work: meetings / shoots / editing",
+  "L3asr + snack": "Asr + snack",
+  "Lmaghrib + adhkar masa": "Maghrib + evening adhkar",
+  "Ta3allom: ktab / course": "Learning: book / course",
+  "L3cha (salat) + 3cha m3a l3a2ila": "Isha + dinner with family",
+  "Review nhar + to-do dyal ghedda": "Review the day + plan tomorrow",
+  "N3as (7h+)": "Sleep (7h+)",
+  "Bloc jdid": "New block",
+};
+
+export function migrateSchedule(schedule: Block[]): Block[] {
+  return schedule.some((b) => b.title in LEGACY_TITLES)
+    ? schedule.map((b) => (b.title in LEGACY_TITLES ? { ...b, title: LEGACY_TITLES[b.title] } : b))
+    : schedule;
+}
 
 export function emptyDay(): DayLog {
   return {
@@ -396,12 +420,12 @@ export function scoreDay(state: LifeState, key: string): { total: number; parts:
 
   const parts: ScorePart[] = [
     { key: "salat", label: "Salat", got: (prayerPts / 5) * 30, max: 30, color: AREAS.deen.color },
-    { key: "deen", label: "Qur2an & adhkar", got: extraDeen * 8, max: 8, color: "#E3C99A" },
+    { key: "deen", label: "Quran & adhkar", got: extraDeen * 8, max: 8, color: "#E3C99A" },
     { key: "nhar", label: "Planning & tasks", got: work * 25, max: 25, color: AREAS.khedma.color },
     { key: "gym", label: "Gym", got: gym * 15, max: 15, color: AREAS.sa7a.color },
-    { key: "makla", label: "Makla", got: food * 12, max: 12, color: "#E5C07B" },
-    { key: "ma", label: "Lma", got: water * 5, max: 5, color: "#5BC0EB" },
-    { key: "n3as", label: "N3as", got: sleep * 5, max: 5, color: AREAS.ta3allom.color },
+    { key: "makla", label: "Nutrition", got: food * 12, max: 12, color: "#E5C07B" },
+    { key: "ma", label: "Water", got: water * 5, max: 5, color: "#5BC0EB" },
+    { key: "n3as", label: "Sleep", got: sleep * 5, max: 5, color: AREAS.ta3allom.color },
   ];
   const total = Math.round(parts.reduce((a, x) => a + x.got, 0));
   return { total, parts };
@@ -461,10 +485,10 @@ export function coachTips(state: LifeState, key: string, now: Date, times: Praye
     const next = PRAYERS.find((pr) => times[pr.key] && toMinutes(times[pr.key]!) > mins);
     const pending = PRAYERS.filter((pr) => times[pr.key] && toMinutes(times[pr.key]!) <= mins && !log.prayers[pr.key]);
     if (pending.length)
-      tips.push({ tone: "warn", title: "Salat", text: `Ma sejeltich: ${pending.map((x) => x.label).join(", ")}. Ila ma salitich — 9oum sali daba 🤲` });
+      tips.push({ tone: "warn", title: "Salat", text: `Not logged yet: ${pending.map((x) => x.label).join(", ")}. If you haven't prayed, go pray now 🤲` });
     if (next) {
       const diff = toMinutes(times[next.key]!) - mins;
-      tips.push({ tone: "info", title: "Salat jaya", text: `${next.label} f ${times[next.key]} (ba9i ${Math.floor(diff / 60)}h${String(diff % 60).padStart(2, "0")}). Wajed rasek 9bel b 10 d9aye9.` });
+      tips.push({ tone: "info", title: "Next prayer", text: `${next.label} at ${times[next.key]} (in ${Math.floor(diff / 60)}h${String(diff % 60).padStart(2, "0")}). Get ready 10 minutes before.` });
     }
   }
 
@@ -472,11 +496,11 @@ export function coachTips(state: LifeState, key: string, now: Date, times: Praye
   const w = workoutFor(p, key);
   if (w && !log.workoutDone) {
     const wk = WORKOUTS[w];
-    tips.push({ tone: "info", title: `Lyoum: ${wk.name}`, text: `${wk.focus} — ${wk.exercises.length} tamarin. Kol 1-2h 9bel: carbs + protein (chofan + banane + 7lib).` });
+    tips.push({ tone: "info", title: `Today: ${wk.name}`, text: `${wk.focus} — ${wk.exercises.length} exercises. Eat 1-2h before: carbs + protein (oats + banana + milk).` });
   } else if (w && log.workoutDone) {
-    tips.push({ tone: "good", title: "Gym ✓", text: "Mzyan! Daba: 30-40g protein f s3a w n3as mzyan bach l3adalat tkber." });
+    tips.push({ tone: "good", title: "Gym ✓", text: "Nice work! Now get 30-40g protein within the hour and sleep well so the muscle grows." });
   } else {
-    tips.push({ tone: "info", title: "Nhar ra7a", text: "L3adalat katkber f ra7a. Mchi 30 d9i9a, stretching, w kol mzyan — ma tn9ssch l makla." });
+    tips.push({ tone: "info", title: "Rest day", text: "Muscle grows while you rest. Walk 30 minutes, stretch, and eat your full targets — don't cut food today." });
   }
 
   // Nutrition (scaled by time of day)
@@ -485,38 +509,38 @@ export function coachTips(state: LifeState, key: string, now: Date, times: Praye
   const kcalLeft = Math.round(t.kcal - tot.kcal);
   if (tot.protein < t.protein * dayFrac * 0.8 && protLeft > 0) {
     const chicken = Math.round((protLeft / 31) * 100);
-    tips.push({ tone: "warn", title: "Protein na9es", text: `Ba9i lik ${protLeft}g protein. Ex: ${Math.min(chicken, 300)}g djaj, wla ${Math.ceil(protLeft / 25)} boitat thon, wla bid + raib.` });
+    tips.push({ tone: "warn", title: "Protein is behind", text: `${protLeft}g protein to go. For example ${Math.min(chicken, 300)}g chicken, or ${Math.ceil(protLeft / 25)} cans of tuna, or eggs + raib.` });
   } else if (protLeft <= 0) {
-    tips.push({ tone: "good", title: "Protein ✓", text: `Wselti ${Math.round(tot.protein)}g protein lyoum. Top.` });
+    tips.push({ tone: "good", title: "Protein ✓", text: `${Math.round(tot.protein)}g protein today. Target hit.` });
   }
   if (kcalLeft > 0 && tot.kcal < t.kcal * dayFrac * 0.75) {
-    tips.push({ tone: "warn", title: "Calories", text: `Ba9i ${kcalLeft} kcal bach tzid f l3adalat. Ila ma 3ndekch chahiya: 7lib + banane + louz + chofan f blender (~700 kcal).` });
+    tips.push({ tone: "warn", title: "Calories", text: `${kcalLeft} kcal to go to build muscle. Low appetite? Blend milk + banana + almonds + oats (~700 kcal).` });
   }
 
   // Water
   const waterExpected = Math.round(p.waterGoal * dayFrac);
-  if (isToday && log.water < waterExpected - 1) tips.push({ tone: "warn", title: "Lma", text: `Chrebti ${log.water}/${p.waterGoal} kisan. Chreb 2 daba.` });
+  if (isToday && log.water < waterExpected - 1) tips.push({ tone: "warn", title: "Water", text: `${log.water}/${p.waterGoal} glasses so far. Drink 2 now.` });
 
   // Weight trend
   const tr = weightTrend(state, key);
   if (tr.perWeek != null) {
     if (tr.perWeek < 0.1 && p.goalWeightKg > p.weightKg)
-      tips.push({ tone: "warn", title: "L wazn wa9ef", text: `Simana hadi ${tr.perWeek >= 0 ? "+" : ""}${tr.perWeek.toFixed(2)}kg. Zid +150 kcal f surplus (f Settings).` });
+      tips.push({ tone: "warn", title: "Weight has stalled", text: `This week ${tr.perWeek >= 0 ? "+" : ""}${tr.perWeek.toFixed(2)}kg. Add 150 kcal to your surplus in Settings.` });
     else if (tr.perWeek > 0.6)
-      tips.push({ tone: "warn", title: "Kattzid bzaf", text: `+${tr.perWeek.toFixed(2)}kg/simana — ghaliban chi chi7am. N9ss 100-150 kcal.` });
+      tips.push({ tone: "warn", title: "Gaining too fast", text: `+${tr.perWeek.toFixed(2)}kg/week — likely some fat. Cut 100-150 kcal.` });
     else if (tr.perWeek >= 0.1)
-      tips.push({ tone: "good", title: "Lean bulk ✓", text: `+${tr.perWeek.toFixed(2)}kg/simana — hada howa rythme mzyan (0.25-0.5).` });
+      tips.push({ tone: "good", title: "Lean bulk ✓", text: `+${tr.perWeek.toFixed(2)}kg/week — right in the 0.25-0.5 sweet spot.` });
   } else {
-    tips.push({ tone: "info", title: "Wzen rasek", text: "Wzen rasek kol sba7 (mor twalet, 9bel makla) bach coach y3ref wach khassek tzid calories." });
+    tips.push({ tone: "info", title: "Weigh in", text: "Weigh yourself every morning (after the bathroom, before eating) so the coach can tell whether to adjust calories." });
   }
 
   // Sleep
   if (log.sleepHours != null && log.sleepHours < 7)
-    tips.push({ tone: "warn", title: "N3as", text: `${log.sleepHours}h ma kafyach. L3adalat katbna f n3as — 7-9h, n3es 9bel 23h.` });
+    tips.push({ tone: "warn", title: "Sleep", text: `${log.sleepHours}h isn't enough. Muscle is built during sleep — aim for 7-9h, in bed before 23:00.` });
 
   // Quran
   if (log.quranPages < p.quranGoalPages)
-    tips.push({ tone: "info", title: "Qur2an", text: `Ba9i ${p.quranGoalPages - log.quranPages} sf7at mn l wird dyalek. Mor kol salat sf7a = sahl.` });
+    tips.push({ tone: "info", title: "Quran", text: `${p.quranGoalPages - log.quranPages} pages left in today's wird. One page after each prayer makes it easy.` });
 
   return tips;
 }

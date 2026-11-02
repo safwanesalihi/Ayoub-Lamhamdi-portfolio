@@ -14,29 +14,29 @@ import { Settings } from "./_components/Settings";
 import type { TabKey, ViewProps } from "./_components/types";
 
 const TABS: { key: TabKey; label: string; icon: string }[] = [
-  { key: "lyoum", label: "Lyoum", icon: "◎" },
+  { key: "lyoum", label: "Today", icon: "◎" },
   { key: "salat", label: "Salat", icon: "☾" },
   { key: "gym", label: "Gym", icon: "▲" },
-  { key: "makla", label: "Makla", icon: "◐" },
-  { key: "nhar", label: "Nhar", icon: "▤" },
+  { key: "makla", label: "Food", icon: "◐" },
+  { key: "nhar", label: "Day", icon: "▤" },
   { key: "progress", label: "Progress", icon: "↗" },
   { key: "settings", label: "Settings", icon: "⚙" },
 ];
 
 const SYNC = {
-  local: { label: "Msejjel f had l-jihaz", color: "#8A8580" },
-  connecting: { label: "Kayt-synchroniza…", color: "#C9A66B" },
-  synced: { label: "Msejjel f l-compte · sync m3a ajhiza khrin", color: "#7FB77E" },
-  offline: { label: "Bla internet · ghadi ysejjel mlli yrje3", color: "#E5A55B" },
+  local: { label: "Saved on this device", color: "#8A8580" },
+  connecting: { label: "Syncing…", color: "#C9A66B" },
+  synced: { label: "Saved to your account · synced across devices", color: "#7FB77E" },
+  offline: { label: "Offline · will sync when back online", color: "#E5A55B" },
 } as const;
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 function greeting(h: number) {
-  if (h < 5) return "Lil mbarek";
-  if (h < 12) return "Sba7 lkhir";
-  if (h < 18) return "Msa lkhir";
-  return "Msa lkhir";
+  if (h < 5) return "Good night";
+  if (h < 12) return "Good morning";
+  if (h < 18) return "Good afternoon";
+  return "Good evening";
 }
 
 export function LifeApp() {
@@ -73,17 +73,17 @@ export function LifeApp() {
             </h1>
           </div>
           <div className="flex items-center gap-2">
-            <button type="button" aria-label="Nhar li fat" className="h-9 w-9 rounded-full border border-white/15 hover:border-white/40" onClick={() => setDayKey(shiftDate(activeDay, -1))}>
+            <button type="button" aria-label="Previous day" className="h-9 w-9 rounded-full border border-white/15 hover:border-white/40" onClick={() => setDayKey(shiftDate(activeDay, -1))}>
               ‹
             </button>
             {!isToday && (
               <button type="button" className="rounded-full border border-white/15 px-3 py-1.5 text-xs hover:border-white/40" onClick={() => setDayKey(null)}>
-                Lyoum
+                Today
               </button>
             )}
             <button
               type="button"
-              aria-label="Nhar jay"
+              aria-label="Next day"
               disabled={isToday}
               className="h-9 w-9 rounded-full border border-white/15 hover:border-white/40 disabled:opacity-30"
               onClick={() => setDayKey(shiftDate(activeDay, 1) >= today ? null : shiftDate(activeDay, 1))}
@@ -92,7 +92,7 @@ export function LifeApp() {
             </button>
             <span className="ml-2 rounded-full bg-white/[0.06] px-3 py-1.5 text-sm tabular-nums">{score}%</span>
           </div>
-          <div className="w-full text-[11px] text-bone/40 md:w-auto md:text-right">
+          <div className="-mt-2 w-full text-[11px] text-bone/40">
             <span className="inline-block h-1.5 w-1.5 rounded-full align-middle" style={{ background: SYNC[status].color }} /> <span className="align-middle">{SYNC[status].label}</span>
           </div>
         </header>
